@@ -10,8 +10,7 @@ module.exports = {
   env: {
     apiUrl: process.env.API_URL || process.env.APP_URL + '/api',
     appName: process.env.APP_NAME || 'Laravel Nuxt',
-    appLocale: process.env.APP_LOCALE || 'en',
-    githubAuth: !!process.env.GITHUB_CLIENT_ID
+    appLocale: process.env.APP_LOCALE || 'en'
   },
 
   head: {
@@ -19,22 +18,31 @@ module.exports = {
     titleTemplate: '%s - ' + process.env.APP_NAME,
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js project' }
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800' },
+      { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.6/css/all.css' }
+    ],
+    script: [
+      {
+        src: 'assets/js/now-ui-dashboard.js',
+        body: true
+      }
     ]
   },
 
   loading: { color: '#007bff' },
 
   router: {
-    middleware: ['locale', 'check-auth']
+    middleware: ['check-auth']
   },
 
   css: [
-    { src: '~assets/sass/app.scss', lang: 'scss' }
+    { src: '~assets/sass/app.scss', lang: 'scss' },
+    { src: '~assets/css/now-ui-dashboard.css' },
+    { src: '~assets/css/demo.css' }
   ],
 
   plugins: [
@@ -44,11 +52,13 @@ module.exports = {
     '~plugins/axios',
     '~plugins/fontawesome',
     '~plugins/nuxt-client-init',
-    { src: '~plugins/bootstrap', mode: 'client' }
+    { src: '~plugins/bootstrap', mode: 'client' },
+    '~plugins/services.plugin.js'
   ],
 
   modules: [
     '@nuxtjs/router'
+    //'@vueform/nuxt'
   ],
 
   build: {
@@ -57,7 +67,7 @@ module.exports = {
 
   hooks: {
     generate: {
-      done (generator) {
+      done(generator) {
         // Copy dist files to public/_nuxt
         if (generator.nuxt.options.dev === false && generator.nuxt.options.mode === 'spa') {
           const publicDir = join(generator.nuxt.options.rootDir, 'public', '_nuxt')

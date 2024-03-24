@@ -3,20 +3,36 @@
     <div class="col-lg-8 m-auto">
       <card :title="$t('login')">
         <form @submit.prevent="login" @keydown="form.onKeydown($event)">
-          <!-- Email -->
+          <!-- Username -->
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
+            <label class="col-md-3 col-form-label text-md-right">{{
+              $t("username")
+            }}</label>
             <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email" name="email" class="form-control">
-              <has-error :form="form" field="email" />
+              <input
+                v-model="form.username"
+                :class="{ 'is-invalid': form.errors.has('username') }"
+                type="text"
+                name="username"
+                class="form-control"
+              />
+              <has-error :form="form" field="username" />
             </div>
           </div>
 
           <!-- Password -->
           <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
+            <label class="col-md-3 col-form-label text-md-right">{{
+              $t("password")
+            }}</label>
             <div class="col-md-7">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password" name="password" class="form-control">
+              <input
+                v-model="form.password"
+                :class="{ 'is-invalid': form.errors.has('password') }"
+                type="password"
+                name="password"
+                class="form-control"
+              />
               <has-error :form="form" field="password" />
             </div>
           </div>
@@ -25,12 +41,11 @@
           <div class="form-group row">
             <div class="col-md-3" />
             <div class="col-md-7 d-flex">
-              <checkbox v-model="remember" name="remember">
-                {{ $t('remember_me') }}
-              </checkbox>
-
-              <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
-                {{ $t('forgot_password') }}
+              <router-link
+                :to="{ name: 'password.request' }"
+                class="small ml-auto my-auto"
+              >
+                {{ $t("forgot_password") }}
               </router-link>
             </div>
           </div>
@@ -39,11 +54,8 @@
             <div class="col-md-7 offset-md-3 d-flex">
               <!-- Submit Button -->
               <v-button :loading="form.busy">
-                {{ $t('login') }}
+                {{ $t("login") }}
               </v-button>
-
-              <!-- GitHub Login Button -->
-              <login-with-github />
             </div>
           </div>
         </form>
@@ -53,47 +65,47 @@
 </template>
 
 <script>
-import Form from 'vform'
+import Form from "vform";
 
 export default {
-  middleware: 'guest',
+  middleware: "guest",
 
   data: () => ({
     form: new Form({
-      email: '',
-      password: ''
+      username: "",
+      password: "",
     }),
-    remember: false
+    remember: false,
   }),
 
-  head () {
-    return { title: this.$t('login') }
+  head() {
+    return { title: this.$t("login") };
   },
 
   methods: {
-    async login () {
-      let data
+    async login() {
+      let data;
 
       // Submit the form.
       try {
-        const response = await this.form.post('/login')
-        data = response.data
+        const response = await this.form.post("/login");
+        data = response.data;
       } catch (e) {
-        return
+        return;
       }
 
       // Save the token.
-      this.$store.dispatch('auth/saveToken', {
+      this.$store.dispatch("auth/saveToken", {
         token: data.token,
-        remember: this.remember
-      })
+        remember: this.remember,
+      });
 
       // Fetch the user.
-      await this.$store.dispatch('auth/fetchUser')
+      await this.$store.dispatch("auth/fetchUser");
 
       // Redirect home.
-      this.$router.push({ name: 'home' })
-    }
-  }
-}
+      this.$router.push({ name: "home" });
+    },
+  },
+};
 </script>

@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Exceptions\VerifyEmailException;
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -38,9 +36,6 @@ class LoginController extends Controller
         }
 
         $user = $this->guard()->user();
-        if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
-            return false;
-        }
 
         $this->guard()->setToken($token);
 
@@ -78,9 +73,6 @@ class LoginController extends Controller
     protected function sendFailedLoginResponse(Request $request)
     {
         $user = $this->guard()->user();
-        if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
-            throw VerifyEmailException::forUser($user);
-        }
 
         throw ValidationException::withMessages([
             $this->username() => [trans('auth.failed')],
@@ -96,5 +88,10 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $this->guard()->logout();
+    }
+
+    public function username()
+    {
+            return 'username';
     }
 }

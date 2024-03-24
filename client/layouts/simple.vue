@@ -1,5 +1,5 @@
 <template>
-  <div class="simple-layout d-flex align-items-center justify-content-center m-0 bg-white">
+  <div class="login-page sidebar-mini">
     <nuxt />
   </div>
 </template>
