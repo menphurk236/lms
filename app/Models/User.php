@@ -21,8 +21,9 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'username',
+        'username', // Add this line
         'password',
+        'role_id'
     ];
 
     /**
@@ -104,8 +105,11 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return [];
     }
 
-    public function username()
-    {
-        return $this->username;
+    public function role() {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function departments() {
+        return $this->hasMany(Department::class);
     }
 }

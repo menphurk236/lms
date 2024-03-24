@@ -1,19 +1,31 @@
 <template>
-  <div class="layout">
-    <navbar />
+  <div class="font-sans antialiased bg-light">
+    <!-- <navbar /> -->
+    <div class="wrapper">
+      <div class="sidebar" data-color="red"><sidebar /></div>
+      <div class="main-panel" id="main-panel">
+        <!-- Navbar -->
 
-    <div class="container mt-4">
-      <nuxt />
+        <HeaderNavber />
+
+        <!-- End Navbar -->
+        <div class="panel-header panel-header-sm"></div>
+        <div class="content">
+          <nuxt />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Navbar from '~/components/Navbar'
+import HeaderNavber from '../components/HeaderNavber.vue'
+import Sidebar from '~/components/Sidebar'
 
 export default {
   components: {
-    Navbar
-  }
-}
+    Sidebar,
+    HeaderNavber
+  },
+};
 </script>

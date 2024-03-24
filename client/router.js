@@ -25,6 +25,65 @@ const routes = [
       { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
       { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
     ]
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: page('admin/dashboard/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'dashboard.index' } },
+      { path: 'index', name: 'dashboard.index', component: page('admin/dashboard/index.vue') }
+    ]
+  },
+  {
+    path: '/users',
+    component: page('admin/user/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'users.list' } },
+      { path: 'list', name: 'users.list', component: page('admin/user/list.vue') },
+      { path: 'create', name: 'users.create', component: page('admin/user/create.vue') },
+      { path: ':id', name: 'users.view', component: page('admin/user/view.vue') }
+    ]
+  },
+  {
+    path: '/catogory',
+    component: page('admin/catogory/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'catogory.list' } },
+      { path: 'list', name: 'catogory.list', component: page('admin/catogory/list.vue') },
+      { path: 'create', name: 'catogory.create', component: page('admin/catogory/create.vue') },
+      { path: ':id', name: 'catogory.view', component: page('admin/catogory/view.vue') }
+    ]
+  },
+  {
+    path: '/employee',
+    component: page('admin/employee/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'employee.list' } },
+      { path: 'list', name: 'employee.list', component: page('admin/employee/list.vue') },
+      { path: 'create', name: 'employee.create', component: page('admin/employee/create.vue') },
+      { path: ':id', name: 'employee.view', component: page('admin/employee/view.vue') }
+    ]
+  },
+  {
+    path: '/video',
+    component: page('admin/video/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'video.list' } },
+      { path: 'list', name: 'video.list', component: page('admin/video/list.vue') },
+      { path: 'create', name: 'video.create', component: page('admin/video/create.vue') },
+      { path: ':id', name: 'video.view', component: page('admin/video/view.vue') }
+    ]
+  },
+  {
+    path: '/department',
+    component: page('admin/department/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'department.list' } },
+      { path: 'list', name: 'department.list', component: page('admin/department/list.vue') },
+      { path: 'create', name: 'department.create', component: page('admin/department/create.vue') },
+      { path: ':id', name: 'department.view', component: page('admin/department/view.vue') }
+    ]
   }
 ]
 

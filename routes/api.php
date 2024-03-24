@@ -5,10 +5,14 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
-use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserController as SecUserController;
+use App\Http\Controllers\VideoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +32,18 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
+
+    Route::get('dashboard', [DashboardController::class, 'index']);
+
+    Route::resource('categories', CategoryController::class);
+
+    Route::resource('employees', EmployeeController::class);
+
+    Route::resource('users', SecUserController::class);
+
+    Route::resource('videos', VideoController::class);
+
+
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
@@ -37,6 +53,6 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
 
-    Route::post('email/verify/{user}', [VerificationController::class, 'verify'])->name('verification.verify');
-    Route::post('email/resend', [VerificationController::class, 'resend']);
+    // Route::post('email/verify/{user}', [VerificationController::class, 'verify'])->name('verification.verify');
+    // Route::post('email/resend', [VerificationController::class, 'resend']);
 });

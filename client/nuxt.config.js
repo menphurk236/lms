@@ -53,12 +53,13 @@ module.exports = {
     '~plugins/fontawesome',
     '~plugins/nuxt-client-init',
     { src: '~plugins/bootstrap', mode: 'client' },
-    '~plugins/services.plugin.js'
+    '~plugins/services.plugin.js',
+    { src: '~/plugins/vue-good-table', mode: 'client' }
   ],
 
   modules: [
-    '@nuxtjs/router'
-    //'@vueform/nuxt'
+    '@nuxtjs/router',
+    '@nuxtjs/google-fonts'
   ],
 
   build: {
@@ -77,6 +78,17 @@ module.exports = {
           removeSync(generator.nuxt.options.generate.dir)
         }
       }
+    }
+  },
+
+  googleFonts: {
+    display: 'swap',
+    prefetch: true,
+    preconnect: true,
+    preload: true,
+    useStylesheet: false,
+    families: {
+      Kanit: true
     }
   }
 }

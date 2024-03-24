@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <!-- <nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container">
       <router-link
         :to="{ name: user ? 'home' : 'welcome' }"
@@ -22,7 +22,6 @@
 
       <div id="navbarToggler" class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <!-- Authenticated -->
           <li v-if="user" class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle text-dark"
@@ -54,7 +53,6 @@
               </a>
             </div>
           </li>
-          <!-- Guest -->
           <template v-else>
             <li class="nav-item">
               <router-link
@@ -78,17 +76,55 @@
         </ul>
       </div>
     </div>
+  </nav> -->
+  <nav class="navbar navbar-expand-lg bg-primary navbar-absolute">
+    <div class="container-fluid">
+      <div class="navbar-wrapper">
+        <router-link
+          :to="{ name: user ? 'home' : 'welcome' }"
+          class="navbar-brand"
+        >
+          <img
+            src="https://www.tumtook.com/wp-content/uploads/2022/09/cropped-Tumtook_New_Logo_Invert-2-1.png"
+            width="60%"
+          />
+        </router-link>
+      </div>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navigation"
+        aria-controls="navigation-index"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-bar navbar-kebab"></span>
+        <span class="navbar-toggler-bar navbar-kebab"></span>
+        <span class="navbar-toggler-bar navbar-kebab"></span>
+      </button>
+      <div id="navigation" class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <router-link
+              :to="{ name: 'login' }"
+              class="nav-link"
+              active-class="active"
+            >
+              <i class="now-ui-icons users_circle-08"></i>
+              สำหรับผู้ดูแลระบบ
+            </router-link>
+          </li>
+        </ul>
+      </div>
+    </div>
   </nav>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import LocaleDropdown from "./LocaleDropdown";
 
 export default {
-  components: {
-    LocaleDropdown,
-  },
 
   data: () => ({
     appName: process.env.appName,
@@ -109,11 +145,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.profile-photo {
-  width: 2rem;
-  height: 2rem;
-  margin: -0.375rem 0;
-}
-</style>

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Department;
+use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,12 +18,12 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $users = User::with('role')->latest()->get();
+            $departments = Department::all();
             DB::commit();
-            return response()->json($users, 200);
+            return response()->json($departments, 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Failed to retrieve users', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Failed to retrieve departments', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -33,7 +34,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -44,24 +45,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'username' => 'required|unique:users|max:255',
-            'name' => 'required',
-            'password' => 'required|min:6',
-            'role_id' => 'required|exists:roles,id',
-        ]);
         DB::beginTransaction();
         try {
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = $request->password;
-            $user->save();
+            $department = new Department();
+            $department->name = $request->name;
+            $department->save();
             DB::commit();
-            return response()->json($user, 201);
+            return response()->json($department, 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Failed to create user', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Failed to create department', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -75,12 +68,14 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $user = User::find($id);
+            $department = Department::find($id);
+            $employees = Employee::where('department_id', $id)->get();
+            $department->employees = $employees;
             DB::commit();
-            return response()->json($user, 200);
+            return response()->json($department, 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Failed to retrieve user', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Failed to retrieve department', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -94,12 +89,14 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $user = User::find($id);
+            $department = Department::find($id);
+            $employees = Employee::where('department_id', $id)->get();
+            $department->employees = $employees;
             DB::commit();
-            return response()->json($user, 200);
+            return response()->json($department, 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Failed to retrieve user', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Failed to retrieve department', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -114,16 +111,14 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $user = User::find($id);
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = $request->password;
-            $user->save();
+            $department = Department::find($id);
+            $department->name = $request->name;
+            $department->save();
             DB::commit();
-            return response()->json($user, 201);
+            return response()->json($department, 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Failed to create user', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Failed to update department', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -137,13 +132,13 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $user = User::find($id);
-            $user->delete();
+            $department = Department::find($id);
+            $department->delete();
             DB::commit();
-            return response()->json($user, 200);
+            return response()->json($department, 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Failed to delete user', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Failed to delete department', 'error' => $e->getMessage()], 500);
         }
     }
 }

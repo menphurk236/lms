@@ -1,5 +1,5 @@
 import axios from 'axios'
-export class CustomerService {
+export class EmployeeService {
 
   constructor($axios) {
     this.$axios = axios
