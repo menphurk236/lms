@@ -6,6 +6,6 @@ export class CategoryService {
   }
 
   async getCategories() {
-    return await this.$axios.get('/api/categories')
+    return await this.$axios.get('/categories')
   }
 }

@@ -6,6 +6,6 @@ export class VideoService {
   }
 
   async getVideos() {
-    return await this.$axios.get('/api/videos')
+    return await this.$axios.get('/videos')
   }
 }

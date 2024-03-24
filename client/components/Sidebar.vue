@@ -10,10 +10,10 @@
     <div class="sidebar-wrapper" id="sidebar-wrapper">
       <ul class="nav">
         <li class="">
-          <a href="">
+          <router-link :to="{ name: 'dashboard' }">
             <i class="now-ui-icons shopping_shop"></i>
             <p>แดชบอร์ด</p>
-          </a>
+          </router-link>
         </li>
         <li class="">
           <a data-toggle="collapse" href="#departmentExamples">
@@ -23,16 +23,20 @@
           <div class="" id="departmentExamples">
             <ul class="nav">
               <li class="">
-                <a href="">
+                <router-link :to="{ name: 'department.list' }">
                   <span class="sidebar-mini-icon">-</span>
                   <span class="sidebar-normal"> แผนกทั้งหมด </span>
-                </a>
+                </router-link>
               </li>
               <li>
-                <a data-toggle="modal" data-target="#staticBackdrop">
+                <!-- <a data-toggle="modal" data-target="#staticBackdrop">
                   <span class="sidebar-mini-icon">-</span>
                   <span class="sidebar-normal"> เพิ่มแผนก </span>
-                </a>
+                </a> -->
+                <router-link :to="{ name: 'department.create' }">
+                  <span class="sidebar-mini-icon">-</span>
+                  <span class="sidebar-normal"> เพิ่มแผนก </span>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -45,22 +49,22 @@
           <div class="" id="videoExamples">
             <ul class="nav">
               <li class="">
-                <a href="">
+                <router-link :to="{ name: 'catogory.list' }">
                   <span class="sidebar-mini-icon">-</span>
                   <span class="sidebar-normal"> หมวดวิดิโอ </span>
-                </a>
+                </router-link>
               </li>
               <li class="">
-                <a href="">
+                <router-link :to="{ name: 'video.list' }">
                   <span class="sidebar-mini-icon">-</span>
                   <span class="sidebar-normal"> วิดิโอทั้งหมด </span>
-                </a>
+                </router-link>
               </li>
               <li class="">
-                <a href="">
+                <router-link :to="{ name: 'video.create' }">
                   <span class="sidebar-mini-icon">-</span>
                   <span class="sidebar-normal"> เพิ่มวิดิโอ </span>
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -73,16 +77,16 @@
           <div class="" id="empExamples">
             <ul class="nav">
               <li class="">
-                <a href="">
+                <router-link :to="{ name: 'employee.list' }">
                   <span class="sidebar-mini-icon">-</span>
                   <span class="sidebar-normal"> พนักงานทั้งหมด </span>
-                </a>
+                </router-link>
               </li>
               <li class="">
-                <a href="">
+                <router-link :to="{ name: 'employee.create' }">
                   <span class="sidebar-mini-icon">-</span>
                   <span class="sidebar-normal"> เพิ่มพนักงาน </span>
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -101,10 +105,10 @@
                 </router-link>
               </li>
               <li class="">
-                <a href="">
+                <router-link :to="{ name: 'users.create' }">
                   <span class="sidebar-mini-icon">-</span>
                   <span class="sidebar-normal"> เพิ่มผู้ใช้งาน </span>
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>

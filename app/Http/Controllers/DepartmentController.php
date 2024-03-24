@@ -18,7 +18,7 @@ class DepartmentController extends Controller
     {
         DB::beginTransaction();
         try {
-            $departments = Department::all();
+            $departments = Department::with('user')->latest()->get();
             DB::commit();
             return response()->json($departments, 200);
         } catch (\Exception $e) {

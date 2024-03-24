@@ -13,6 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController as SecUserController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('settings/password', [PasswordController::class, 'update']);
 
     Route::get('dashboard', [DashboardController::class, 'index']);
+
+    Route::resource('departments', DepartmentController::class);
 
     Route::resource('categories', CategoryController::class);
 

@@ -54,8 +54,10 @@ class UserController extends Controller
         try {
             $user = new User();
             $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = $request->password;
+            $user->email = $request->name.'@example.com';
+            $user->role_id = $request->role_id;
+            $user->username = $request->username;
+            $user->password = bcrypt($request->password);
             $user->save();
             DB::commit();
             return response()->json($user, 201);

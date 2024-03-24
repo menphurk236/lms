@@ -84,7 +84,9 @@
                     </span>
                     {{
                       props.column.field == "role"
-                        ? props.row.role
+                        ? props.row.role !== null
+                          ? props.row.role.name
+                          : ""
                         : props.row[props.column.field]
                     }}
                   </template>

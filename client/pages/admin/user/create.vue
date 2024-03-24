@@ -119,11 +119,13 @@ export default {
   methods: {
     async createUser() {
       let data;
-
       // Submit the form.
       try {
         const response = await this.form.post("/users");
         data = response.data;
+        // console.log("this.form", this.form);
+        // await this.$userService.createUser(this.form);
+        // data = response.data;
       } catch (e) {
         return;
       }
