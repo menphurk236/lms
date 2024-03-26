@@ -11,9 +11,10 @@
             <div style="font-size: 16px; font-weight: 400">
               แผนกทั้งหมด {{ departments.length }} แผนก
               <b-button
-                @click="showModal=true"
+                @click="showModal = true"
                 class="btn btn-primary btn-sm ml-2"
-                >เพิ่มแผนก</b-button>
+                >เพิ่มแผนก</b-button
+              >
             </div>
 
             <form action="" method="GET" class="form-inline m-3">
@@ -47,6 +48,11 @@
                 mode="remote"
                 :columns="columns"
                 :rows="departments"
+                :pagination-options="{
+                  enabled: true,
+                  mode: 'records',
+                }"
+                :line-numbers="true"
                 style-class="tableOne vgt-table"
               >
                 <div slot="selected-row-actions">
@@ -88,10 +94,10 @@
       </div>
     </div>
   </div>
-  </div>
 </template>
 <script>
 import ModalForm from "@/components/global/ModalForm.vue";
+import Swal from "sweetalert2";
 export default {
   components: {
     ModalForm,
@@ -106,9 +112,6 @@ export default {
 
     return { departments };
   },
-  // created() {
-  //   this.getDataUser();
-  // },
   methods: {
     async showDetails() {
       this.showModal = true;
@@ -126,15 +129,23 @@ export default {
       // this.$router.push({ name: "users.list" });
     },
     async delete_department(id) {
-      // console.log("delete_user", id);
-      // let data;
-      // try {
-      //   const response = await this.form.post("/users");
-      //   data = response.data;
-      // } catch (e) {
-      //   return;
-      // }
-      // this.$router.push({ name: "users.list" });
+      const { value } = await Swal.fire({
+        title: "คุณแน่ใจหรือไม่?",
+        text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ใช่, ลบข้อมูล!",
+      });
+
+      if (value) {
+        await this.$departmentService.deleteDepartment(id);
+        this.departments = this.departments.filter((department) => {
+          return department.id !== id;
+        });
+        Swal.fire("ลบแผนกเรียบร้อย!", "", "success");
+      }
     },
   },
   computed: {
@@ -151,6 +162,8 @@ export default {
           field: "created_at",
           tdClass: "text-center",
           thClass: "text-center",
+          dateInputFormat: "yyyy-MM-dd", // expects 2018-03-16
+          dateOutputFormat: "MMM do yyyy", // outputs Mar 16th 2018
           sortable: true,
         },
         {

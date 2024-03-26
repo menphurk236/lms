@@ -14,6 +14,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController as SecUserController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\MasterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,17 +35,27 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
 
-    Route::get('dashboard', [DashboardController::class, 'index']);
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('departments', DepartmentController::class);
 
     Route::resource('categories', CategoryController::class);
 
     Route::resource('employees', EmployeeController::class);
+    Route::post('employees/add-video/{id}', [EmployeeController::class, 'AddEmployeeVideos'])->name('employees.add-video');
+    Route::delete('employees/delete-video/{id}', [EmployeeController::class, 'RemoveEmployeeVideos'])->name('employees.delete-video');
 
     Route::resource('users', SecUserController::class);
 
     Route::resource('videos', VideoController::class);
+
+    Route::group(['prefix'=>'master','as'=>'master.'], function(){
+        Route::get('category-video', [MasterController::class, 'CategoryVideo'])->name('category-video');
+        Route::get('department', [MasterController::class, 'Department'])->name('department');
+        Route::get('employee', [MasterController::class, 'Employee'])->name('employee');
+        Route::get('employee-by-department/{id}', [MasterController::class, 'EmployeeByDepartment'])->name('employee-by-department');
+        Route::get('video', [MasterController::class, 'Video'])->name('video');
+    });
 
 
 });

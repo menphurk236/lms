@@ -46,13 +46,13 @@ const routes = [
     ]
   },
   {
-    path: '/catogory',
-    component: page('admin/catogory/index.vue'),
+    path: '/category',
+    component: page('admin/category/index.vue'),
     children: [
-      { path: '', redirect: { name: 'catogory.list' } },
-      { path: 'list', name: 'catogory.list', component: page('admin/catogory/list.vue') },
-      { path: 'create', name: 'catogory.create', component: page('admin/catogory/create.vue') },
-      { path: ':id', name: 'catogory.view', component: page('admin/catogory/view.vue') }
+      { path: '', redirect: { name: 'category.list' } },
+      { path: 'list', name: 'category.list', component: page('admin/category/list.vue') },
+      { path: 'create', name: 'category.create', component: page('admin/category/create.vue') },
+      { path: ':id', name: 'category.view', component: page('admin/category/view.vue') }
     ]
   },
   {

@@ -18,4 +18,8 @@ class Department extends Model
     {
         return $this->hasOne(User::class, 'id', 'created_by');
     }
+
+    public function getCreatedAtAttribute($value) {
+        return \Carbon\Carbon::parse($value)->format('d-m-Y');
+    }
 }

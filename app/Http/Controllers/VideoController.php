@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Video;
 use App\Models\VideoCategory;
 use Illuminate\Support\Facades\DB;
+use App\Models\Employee;
+use App\Models\MappingVideo;
+use Illuminate\Support\Facades\Log;
 
 class VideoController extends Controller
 {
@@ -34,7 +37,12 @@ class VideoController extends Controller
      */
     public function create()
     {
-        //
+        $category = VideoCategory::all();
+
+        $data = [
+            'category' => $category
+        ];
+        return response()->json($data, 200);
     }
 
     /**
@@ -47,14 +55,37 @@ class VideoController extends Controller
     {
         DB::beginTransaction();
         try {
-            $video = new Video();
-            $video->title = $request->title;
-            $video->description = $request->description;
-            $video->video_url = $request->video_url;
-            $video->video_category_id = $request->video_category_id;
-            $video->save();
+            /* Storing the file on the disk  */
+            $path = $request->file('video_path')->storeAs(
+                'video',
+                $request->file('video_path')->getClientOriginalName() . '.' . $request->file('video_path')->getClientOriginalExtension()
+            );
+            $id = Video::create([
+            'category_video_id' => $request->category_video_id,
+            'title' => $request->title,
+            'video_path' => $path,
+            'video_duration' => $request->video_duration,
+            'created_by' => auth()->user()->id,
+            'updated_by' => auth()->user()->id,
+            'created_upload' => $request->created_upload
+        ])->id;
+
+        Log::info("message:", $request->get('employee_id'));
+
+        foreach ($request->employee_id as $key) {
+            $value = trim($key);
+            if ($value !== '') {
+                $employee = Employee::where('id', $key)->firstOrFail();
+                $mapVideoReq = [
+                    'video_id' => $id,
+                    'employee_id' => $value,
+                    'department_id' => $employee['department_id']
+                ];
+                MappingVideo::insert($mapVideoReq);
+            }
+        }
             DB::commit();
-            return response()->json($video, 201);
+            return response()->json('create video successfully', 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'Failed to create video', 'error' => $e->getMessage()], 500);

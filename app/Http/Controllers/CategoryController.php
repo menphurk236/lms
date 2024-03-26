@@ -49,8 +49,8 @@ class CategoryController extends Controller
             $category = new CategoryVideo();
             $category->code = $request->code;
             $category->name = $request->name;
-            $category->created_by = $request->created_by;
-            $category->updated_by = $request->updated_by;
+            $category->created_by = auth()->user()->id;
+            $category->updated_by = auth()->user()->id;
             $category->save();
             DB::commit();
             return response()->json($category, 201);
@@ -112,7 +112,7 @@ class CategoryController extends Controller
             $category = CategoryVideo::find($id);
             $category->code = $request->code;
             $category->name = $request->name;
-            $category->updated_by = $request->updated_by;
+            $category->updated_by = auth()->user()->id;
             $category->save();
             DB::commit();
             return response()->json($category, 200);

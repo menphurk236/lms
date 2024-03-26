@@ -125,7 +125,6 @@
 import { mapGetters } from "vuex";
 
 export default {
-
   data: () => ({
     appName: process.env.appName,
   }),
@@ -133,7 +132,12 @@ export default {
   computed: mapGetters({
     user: "auth/user",
   }),
-
+  created() {
+    console.log(this.$route.path === "/login" || this.user);
+    if (this.user && this.$route.path === "/login") {
+      this.$router.push("/dashboard"); // Redirect to login page if user is not logged in
+    }
+  },
   methods: {
     async logout() {
       // Log out the user.

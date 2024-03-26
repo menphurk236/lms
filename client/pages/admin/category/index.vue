@@ -1,11 +1,15 @@
 <template>
   <div>
-    <h1>Category</h1>
+    <transition name="fade" mode="out-in">
+      <router-view />
+    </transition>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  middleware: "auth",
+};
 </script>
 
 <style>

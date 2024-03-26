@@ -10,7 +10,10 @@ module.exports = {
   ],
   rules: {
     'vue/max-attributes-per-line': 'off',
-    'vue/no-unused-vars': 'off',
-    'vue/multi-word-component-names': 'off'
+    "no-unused-vars": "off",
+    'vue/multi-word-component-names': 'off',
+    "avoidEscape": true,
+    "allowTemplateLiterals": true,
+    "extrasemi": 0
   }
 }

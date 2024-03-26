@@ -161,8 +161,7 @@ export default {
     form: new Form({
       username: "",
       password: "",
-    }),
-    remember: false,
+    })
   }),
 
   head() {
@@ -183,8 +182,7 @@ export default {
 
       // Save the token.
       this.$store.dispatch("auth/saveToken", {
-        token: data.token,
-        remember: this.remember,
+        token: data.token
       });
 
       // Fetch the user.

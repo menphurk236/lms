@@ -5,18 +5,13 @@
         <div class="card">
           <div class="card-body">
             <h3 class="card-title" style="font-size: 2.25em; font-weight: 500">
-              พนักงาน
+              หมวดวิดิโอ
             </h3>
             <div style="font-size: 16px; font-weight: 400">
-              พนักงานทั้งหมด {{ employees.length }} คน
-              <router-link
-                to="/employee/create"
-                class="btn btn-primary btn-sm ml-2"
-                >เพิ่ม</router-link
-              >
+              หมวดวิดิโอทั้งหมด {{ categories.length }} หมวด
             </div>
 
-            <!-- <form
+            <form
               class="form-horizontal mt-2"
               method="POST"
               @submit.prevent="handleSubmit"
@@ -67,12 +62,12 @@
                   </button>
                 </div>
               </div>
-            </form> -->
+            </form>
             <div class="table-responsive-md">
               <vue-good-table
                 mode="remote"
                 :columns="columns"
-                :rows="employees"
+                :rows="categories"
                 :pagination-options="{
                   enabled: true,
                   mode: 'records',
@@ -87,28 +82,23 @@
                 </div>
                 <template slot="table-row" slot-scope="props">
                   <span v-if="props.column.field == 'actions'">
-                    <router-link
-                      :to="{
-                        name: 'employee.view',
-                        params: { id: props.row.id },
-                      }"
+                    <b-button
+                      @click="
+                        $router.push({
+                          name: 'admin.category.edit',
+                          params: { id: props.row.id },
+                        })
+                      "
                       class="btn btn-success btn-icon btn-sm"
-                      ><i class="fas fa-eye"></i
-                    ></router-link>
+                      ><i class="fas fa-pencil-alt"></i
+                    ></b-button>
                     <b-button
                       class="btn btn-danger btn-icon btn-sm"
-                      @click="delete_employee(props.row.id)"
+                      @click="delete_category(props.row.id)"
                       variant="outline-danger"
                       ><i class="far fa-trash-alt"></i
                     ></b-button>
                   </span>
-                  {{
-                    props.column.field == "department"
-                      ? props.row.department !== null
-                        ? props.row.department.name
-                        : ""
-                      : props.row[props.column.field]
-                  }}
                 </template>
               </vue-good-table>
             </div>
@@ -120,46 +110,106 @@
 </template>
 
 <script>
+import { required } from "vuelidate/lib/validators";
+import Swal from "sweetalert2";
 export default {
-  async asyncData({ app: { $employeeService } }) {
+  data: () => ({
+    form: {
+      code: "",
+      name: "",
+    },
+  }),
+  validations: {
+    form: {
+      code: {
+        required,
+      },
+      name: {
+        required,
+      },
+    },
+  },
+  async asyncData({ app: { $categoryService } }) {
     // use the user service to get a list of user
-    const { data: employees } = await $employeeService.getEmployees();
+    const { data: categories } = await $categoryService.getCategories();
 
-    return { employees };
+    return { categories };
+  },
+  methods: {
+    async delete_by_selected() {
+      // console.log("delete_by_selected");
+      // console.log(this.selectedRows);
+      // let data;
+      // try {
+      //   const response = await this.form.post("/users");
+      //   data = response.data;
+      // } catch (e) {
+      //   return;
+      // }
+      // this.$router.push({ name: "users.list" });
+    },
+    async delete_category(id) {
+      Swal.fire({
+        title: "คุณแน่ใจหรือไม่?",
+        text: "คุณต้องการลบหมวดวิดิโอนี้จริงหรือไม่?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ใช่, ลบเลย!",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.value) {
+          try {
+            await this.$categoryService.deleteCategory(id);
+            this.$nuxt.refresh();
+          } catch (e) {
+            return;
+          }
+        }
+      });
+    },
+    async handleSubmit() {
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return false;
+      } else {
+        this.createCategory();
+      }
+    },
+    async createCategory() {
+      const formData = new FormData();
+      formData.append("code", this.form.code);
+      formData.append("name", this.form.name);
+
+      try {
+        await this.$categoryService.createCategory(formData);
+        this.$nuxt.refresh();
+        this.form.clear();
+      } catch (e) {
+        return;
+      }
+    },
   },
   computed: {
     columns() {
       return [
         {
-          label: "ชื่อแผนก",
-          field: "department",
+          label: "รหัส",
+          field: "code",
           tdClass: "text-center",
           thClass: "text-center",
           sortable: true,
         },
         {
-          label: "รหัสพนักงาน",
-          field: "code",
-          tdClass: "text-center",
-          thClass: "text-center",
-          sortable: false,
-        },
-        {
-          label: "ชื่อ-นามสกุล",
+          label: "หมวด",
           field: "name",
           tdClass: "text-center",
           thClass: "text-center",
           sortable: true,
         },
         {
-          label: "เปอร์เซ็นต์ที่ดู",
-          field: "video_duration",
-          tdClass: "text-center",
-          thClass: "text-center",
-          sortable: true,
-        },
-        {
-          label: "จัดการ",
+          label: "",
           field: "actions",
           html: true,
           tdClass: "text-center",
@@ -169,7 +219,6 @@ export default {
       ];
     },
   },
-  methods: {},
 };
 </script>
 

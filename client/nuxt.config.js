@@ -9,7 +9,7 @@ module.exports = {
 
   env: {
     apiUrl: process.env.API_URL || process.env.APP_URL + '/api',
-    appName: process.env.APP_NAME || 'Laravel Nuxt',
+    appName: process.env.APP_NAME || 'Lms',
     appLocale: process.env.APP_LOCALE || 'en'
   },
 
@@ -27,7 +27,7 @@ module.exports = {
     ],
     script: [
       {
-        src: 'assets/js/now-ui-dashboard.js',
+        src: '/assets/js/now-ui-dashboard.js',
         body: true
       }
     ]
@@ -54,12 +54,15 @@ module.exports = {
     '~plugins/nuxt-client-init',
     { src: '~plugins/bootstrap', mode: 'client' },
     '~plugins/services.plugin.js',
-    { src: '~/plugins/vue-good-table', mode: 'client' }
+    { src: '~/plugins/vue-good-table', mode: 'client' },
+    '~/plugins/v-select',
+    '~plugins/vuelidate.js'
   ],
 
   modules: [
     '@nuxtjs/router',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
+    'bootstrap-vue/nuxt'
   ],
 
   build: {

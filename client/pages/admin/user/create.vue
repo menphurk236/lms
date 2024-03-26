@@ -93,7 +93,7 @@
                   <v-button :loading="form.busy" class="btn btn-primary">
                     บันทึก
                   </v-button>
-                  <button type="button" class="btn btn-info">ยกเลิก</button>
+                  <button type="reset" class="btn btn-info">ยกเลิก</button>
                 </div>
               </div>
             </form>

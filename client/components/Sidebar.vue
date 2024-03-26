@@ -49,7 +49,7 @@
           <div class="" id="videoExamples">
             <ul class="nav">
               <li class="">
-                <router-link :to="{ name: 'catogory.list' }">
+                <router-link :to="{ name: 'category.list' }">
                   <span class="sidebar-mini-icon">-</span>
                   <span class="sidebar-normal"> หมวดวิดิโอ </span>
                 </router-link>
