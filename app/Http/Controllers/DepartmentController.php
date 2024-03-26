@@ -14,11 +14,13 @@ class DepartmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         DB::beginTransaction();
         try {
-            $departments = Department::with('user')->latest()->get();
+            $departments = Department::with('user')->where(function ($query) use ($request){
+                           $query->where('id', 'like', "%{$request->q}%");
+                       })->latest()->get();
             DB::commit();
             return response()->json($departments, 200);
         } catch (\Exception $e) {

@@ -29,14 +29,43 @@
                 </router-link>
               </li>
               <li>
-                <!-- <a data-toggle="modal" data-target="#staticBackdrop">
-                  <span class="sidebar-mini-icon">-</span>
-                  <span class="sidebar-normal"> เพิ่มแผนก </span>
-                </a> -->
-                <router-link :to="{ name: 'department.create' }">
-                  <span class="sidebar-mini-icon">-</span>
-                  <span class="sidebar-normal"> เพิ่มแผนก </span>
-                </router-link>
+                <b-button @click="showModal = true" class="btn btn-primary"
+                  ><span class="sidebar-mini-icon">-</span>
+                  <span class="sidebar-normal"> เพิ่มแผนก </span></b-button
+                >
+                <b-modal v-model="showModal" title="เพิ่มแผนก" hide-footer>
+                  <form
+                    class="form-horizontal"
+                    @submit.prevent="handleSubmit()"
+                  >
+                    <div class="row">
+                      <label class="col-md-2 col-form-label">ชื่อแผนก</label>
+                      <div class="col-md-8">
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            v-model="form.name"
+                            class="form-control"
+                            :class="{
+                              'is-invalid': $v.form.name.$error,
+                            }"
+                          />
+                          <div
+                            v-if="!$v.form.name.required"
+                            class="invalid-feedback"
+                          >
+                            กรุณากรอกชื่อแผนก
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center">
+                      <button type="submit" class="btn btn-primary">
+                        บันทึก
+                      </button>
+                    </div>
+                  </form>
+                </b-modal>
               </li>
             </ul>
           </div>
@@ -119,7 +148,34 @@
 </template>
 
 <script>
-export default {};
+import { required } from "vuelidate/lib/validators";
+export default {
+  data() {
+    return {
+      showModal: false,
+      form: {
+        name: "",
+      },
+    };
+  },
+  validations: {
+    form: {
+      name: {
+        required,
+      },
+    },
+  },
+  methods: {
+    handleSubmit() {
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+      this.$store.dispatch("department/createDepartment", this.form);
+      this.showModal = false;
+    },
+  },
+};
 </script>
 
 <style>

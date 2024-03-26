@@ -73,7 +73,7 @@
                       <b-button
                         @click="
                           $router.push({
-                            name: 'admin.user.edit',
+                            name: 'admin.video.edit',
                             params: { id: props.row.id },
                           })
                         "
@@ -82,7 +82,7 @@
                       ></b-button>
                       <b-button
                         class="btn btn-danger btn-icon btn-sm"
-                        @click="delete_user(props.row.id)"
+                        @click="delete_video(props.row.id)"
                         variant="outline-danger"
                         ><i class="far fa-trash-alt"></i
                       ></b-button>

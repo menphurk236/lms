@@ -1,6 +1,5 @@
 <template>
   <div class="content">
-    <modalform v-if="showModal" name="Umesh" />
     <div class="row">
       <div class="col-md-12">
         <div class="card">
@@ -15,9 +14,43 @@
                 class="btn btn-primary btn-sm ml-2"
                 >เพิ่มแผนก</b-button
               >
+              <b-modal v-model="showModal" title="เพิ่มแผนก" hide-footer>
+                <form class="form-horizontal" @submit.prevent="handleSubmit()">
+                  <div class="row">
+                    <label class="col-md-2 col-form-label">ชื่อแผนก</label>
+                    <div class="col-md-8">
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          v-model="form.name"
+                          class="form-control"
+                          :class="{
+                            'is-invalid': $v.form.name.$error,
+                          }"
+                        />
+                        <div
+                          v-if="!$v.form.name.required"
+                          class="invalid-feedback"
+                        >
+                          กรุณากรอกชื่อแผนก
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <button type="submit" class="btn btn-primary">
+                      บันทึก
+                    </button>
+                  </div>
+                </form>
+              </b-modal>
             </div>
 
-            <form action="" method="GET" class="form-inline m-3">
+            <form
+              @submit.prevent="getDepartments"
+              method="GET"
+              class="form-inline m-3"
+            >
               <div class="form-group d-flex col-xs-12 col-sm-12">
                 <label
                   class="col-label"
@@ -25,8 +58,15 @@
                   >ชื่อแผนก</label
                 >
                 <div class="form-group col-xs-12">
-                  <select class="form-control" wire:model="search">
+                  <select class="form-control" v-model="q">
                     <option value>กรุณาเลือก</option>
+                    <option
+                      v-for="item in listdepartments"
+                      :key="item"
+                      :value="item.id"
+                    >
+                      {{ item.name }}
+                    </option>
                   </select>
                 </div>
 
@@ -45,7 +85,6 @@
             </form>
             <div class="table-responsive-md">
               <vue-good-table
-                mode="remote"
                 :columns="columns"
                 :rows="departments"
                 :pagination-options="{
@@ -63,12 +102,7 @@
                 <template slot="table-row" slot-scope="props">
                   <span v-if="props.column.field == 'actions'">
                     <b-button
-                      @click="
-                        $router.push({
-                          name: 'admin.department.edit',
-                          params: { id: props.row.id },
-                        })
-                      "
+                      @click="editDepartment(props.row.id)"
                       class="btn btn-success btn-icon btn-sm"
                       ><i class="fas fa-pencil-alt"></i
                     ></b-button>
@@ -96,25 +130,70 @@
   </div>
 </template>
 <script>
-import ModalForm from "@/components/global/ModalForm.vue";
 import Swal from "sweetalert2";
+import ModalForm from "../../../components/ModalForm.vue";
+import { required } from "vuelidate/lib/validators";
 export default {
   components: {
     ModalForm,
   },
-  data: () => ({
-    showModal: false,
-  }),
+  data() {
+    return {
+      showModal: false,
+      departments: [],
+      selectedRows: [],
+      form: {
+        name: "",
+      },
+      listdepartments: [],
+      q: "",
+    };
+  },
+  validations: {
+    form: {
+      name: {
+        required,
+      },
+    },
+  },
+  // async asyncData({ app: { $departmentService } }) {
+  //   // use the user service to get a list of user
+  //   const { data: departments } = await $departmentService.getDepartments();
 
-  async asyncData({ app: { $departmentService } }) {
-    // use the user service to get a list of user
-    const { data: departments } = await $departmentService.getDepartments();
-
-    return { departments };
+  //   return { departments };
+  // },
+  created() {
+    this.getDepartments();
   },
   methods: {
-    async showDetails() {
+    async getDepartments() {
+      const { data: departments } =
+        await this.$departmentService.getDepartments(this.q);
+      this.listdepartments = departments;
+      this.departments = departments;
+    },
+    async editDepartment(id) {
       this.showModal = true;
+      this.form = this.departments.find((department) => department.id === id);
+    },
+    async handleSubmit() {
+      console.log("handleSubmit", this.form.id);
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+      console.log(this.form);
+      if (this.form.id) {
+        await this.$departmentService.updateDepartment(this.form.id, this.form);
+      } else {
+        await this.$departmentService.createDepartment(this.form);
+      }
+
+      this.showModal = false;
+      this.form = {
+        name: "",
+      };
+      this.$nuxt.refresh();
     },
     async delete_by_selected() {
       // console.log("delete_by_selected");

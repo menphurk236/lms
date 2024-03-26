@@ -4,8 +4,8 @@ export class DepartmentService {
     this.$axios = axios;
   }
 
-  async getDepartments() {
-    return await this.$axios.get('/departments');
+  async getDepartments(q) {
+    return await this.$axios.get(`/departments?q=${q}`);
   }
 
   async getDepartment(id) {

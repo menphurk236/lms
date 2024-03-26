@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CategoryVideo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -109,9 +110,10 @@ class CategoryController extends Controller
     {
         DB::beginTransaction();
         try {
+            Log::alert("message", $request->all());
             $category = CategoryVideo::find($id);
-            $category->code = $request->code;
-            $category->name = $request->name;
+            $category->code = $request->get('code') ?? $category->code;
+            $category->name = $request->get('name') ?? $category->name;
             $category->updated_by = auth()->user()->id;
             $category->save();
             DB::commit();

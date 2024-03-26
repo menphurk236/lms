@@ -83,12 +83,7 @@
                 <template slot="table-row" slot-scope="props">
                   <span v-if="props.column.field == 'actions'">
                     <b-button
-                      @click="
-                        $router.push({
-                          name: 'admin.category.edit',
-                          params: { id: props.row.id },
-                        })
-                      "
+                      @click="editCategory(props.row.id)"
                       class="btn btn-success btn-icon btn-sm"
                       ><i class="fas fa-pencil-alt"></i
                     ></b-button>
@@ -136,6 +131,9 @@ export default {
     return { categories };
   },
   methods: {
+    async editCategory(id) {
+      this.form = this.categories.find((category) => category.id === id);
+    },
     async delete_by_selected() {
       // console.log("delete_by_selected");
       // console.log(this.selectedRows);
@@ -183,7 +181,11 @@ export default {
       formData.append("name", this.form.name);
 
       try {
-        await this.$categoryService.createCategory(formData);
+        if (this.form.id) {
+          await this.$categoryService.updateCategory(this.form.id, formData);
+        } else {
+          await this.$categoryService.createCategory(formData);
+        }
         this.$nuxt.refresh();
         this.form.clear();
       } catch (e) {
