@@ -15,10 +15,10 @@
             </div>
             <div class="col-md-12 ml-auto">
               <div class="d-flex justify-content-center">
-                <form action="/result" autocomplete="nope">
+                <form @submit.prevent="handleSubmit" autocomplete="nope">
                   <div class="form-row align-items-end">
                     <div class="form-group col">
-                      <input
+                      <!-- <input
                         class="typeahead form-control"
                         placeholder="พิมพ์ชื่อตัวเอง 5 ตัวอักษรขึ้นไป"
                         id="search"
@@ -27,6 +27,11 @@
                         type="text"
                         autocomplete="off"
                         required
+                      /> -->
+                      <vue-bootstrap-typeahead
+                        v-model="query"
+                        placeholder="พิมพ์ชื่อตัวเอง 5 ตัวอักษรขึ้นไป"
+                        :data="employees"
                       />
                     </div>
 
@@ -51,14 +56,52 @@
 </template>
 
 <script>
+import VueBootstrapTypeahead from "vue-bootstrap-typeahead";
 import { mapGetters } from "vuex";
+import Swal from "sweetalert2";
 
 export default {
   layout: "simple",
-
+  components: {
+    VueBootstrapTypeahead,
+  },
   data: () => ({
     title: process.env.appName,
+    query: "",
+    employees: [],
   }),
+
+  created() {
+    this.getEmployees();
+  },
+
+  methods: {
+    async getEmployees() {
+      try {
+        const response = await this.$masterDataService.getEmployee();
+        this.employees = response.data.map((employee) => {
+          return {
+            id: employee.id,
+            name: employee.name,
+          };
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handleSubmit() {
+      console.log(this.query);
+      if (this.query.length < 5) {
+        Swal.fire({
+          icon: "error",
+          title: "ข้อผิดพลาด",
+          text: "กรุณากรอกชื่อตัวเอง 5 ตัวอักษรขึ้นไป",
+        });
+      } else {
+        this.$router.push({ name: "result", query: { search: this.query } });
+      }
+    },
+  },
 
   head() {
     return { title: this.$t("home") };

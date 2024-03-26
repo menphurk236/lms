@@ -4,6 +4,7 @@ import { UserService } from '../services/user.service';
 import { VideoService } from '../services/video.service';
 import { CategoryService } from '../services/category.service';
 import { DepartmentService } from '../services/department.service';
+import { MasterDataService } from '../services/masterdata.service';
 
 export default ({ $axios }, inject) => {
   const dashboardService = new DashboardService($axios);
@@ -12,10 +13,12 @@ export default ({ $axios }, inject) => {
   const videoService = new VideoService($axios);
   const categoryService = new CategoryService($axios);
   const departmentService = new DepartmentService($axios);
+  const masterDataService = new MasterDataService($axios);
   inject('dashboardService', dashboardService);
   inject('employeeService', employeeService);
   inject('userService', userService);
   inject('videoService', videoService);
   inject('categoryService', categoryService);
   inject('departmentService', departmentService);
+  inject('masterDataService', masterDataService);
 }

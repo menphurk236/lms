@@ -146,7 +146,7 @@ export default {
   },
   methods: {
     async department() {
-      const response = await this.$departmentService.getDepartments();
+      const response = await this.$masterDataService.getDepartment();
       this.departments = response.data;
     },
     onSelectedDepartment: function (opt) {

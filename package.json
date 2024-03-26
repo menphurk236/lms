@@ -26,6 +26,7 @@
     "popper.js": "^1.16.1",
     "sweetalert2": "^10.10.4",
     "vform": "^1.0.1",
+    "vue-bootstrap-typeahead": "^0.2.6",
     "vue-good-table": "^2.21.11",
     "vue-i18n": "^8.22.2",
     "vue-select": "^3.20.2",

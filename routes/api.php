@@ -49,14 +49,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::resource('videos', VideoController::class);
 
-    Route::group(['prefix'=>'master','as'=>'master.'], function(){
-        Route::get('category-video', [MasterController::class, 'CategoryVideo'])->name('category-video');
-        Route::get('department', [MasterController::class, 'Department'])->name('department');
-        Route::get('employee', [MasterController::class, 'Employee'])->name('employee');
-        Route::get('employee-by-department/{id}', [MasterController::class, 'EmployeeByDepartment'])->name('employee-by-department');
-        Route::get('video', [MasterController::class, 'Video'])->name('video');
-    });
-
 
 });
 
@@ -69,4 +61,11 @@ Route::group(['middleware' => 'guest:api'], function () {
 
     // Route::post('email/verify/{user}', [VerificationController::class, 'verify'])->name('verification.verify');
     // Route::post('email/resend', [VerificationController::class, 'resend']);
+        Route::group(['prefix'=>'master','as'=>'master.'], function(){
+        Route::get('category-video', [MasterController::class, 'CategoryVideo'])->name('category-video');
+        Route::get('department', [MasterController::class, 'Department'])->name('department');
+        Route::get('employee', [MasterController::class, 'Employee'])->name('employee');
+        Route::get('employee-by-department/{id}', [MasterController::class, 'EmployeeByDepartment'])->name('employee-by-department');
+        Route::get('video', [MasterController::class, 'Video'])->name('video');
+    });
 });
