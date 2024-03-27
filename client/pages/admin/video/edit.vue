@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
-            <h4 class="card-title">เพิ่ม วิดิโอ Lms</h4>
+            <h4 class="card-title">แก้ไข วิดิโอ Lms</h4>
           </div>
           <div class="card-body">
             <form

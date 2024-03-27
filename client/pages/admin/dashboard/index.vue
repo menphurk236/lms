@@ -5,7 +5,7 @@
         <div class="card card-chart">
           <div class="card-header">
             <h5 class="card-category">พนักงานทั้งหมด</h5>
-            <span style="font-size: 54px">100 คน</span>
+            <span style="font-size: 54px">{{ emptotal }} คน</span>
             <div class="dropdown">
               <i class="fas fa-user-friends fa-6x"></i>
             </div>
@@ -18,7 +18,7 @@
         <div class="card card-chart">
           <div class="card-header">
             <h5 class="card-category">แผนกทั้งหมด</h5>
-            <span style="font-size: 54px">20 แผนก</span>
+            <span style="font-size: 54px">{{ deptotal }} แผนก</span>
             <div class="dropdown">
               <i class="fas fa-address-book fa-6x"></i>
             </div>
@@ -31,7 +31,7 @@
         <div class="card card-chart">
           <div class="card-header">
             <h5 class="card-category">วิดิโอทั้งหมด</h5>
-            <span style="font-size: 54px">100 วิดิโอ</span>
+            <span style="font-size: 54px">{{ videototal }} วิดิโอ</span>
             <div class="dropdown">
               <i class="fas fa-video fa-6x"></i>
             </div>
@@ -72,6 +72,19 @@
 <script>
 export default {
   middleware: "auth",
+  data() {
+    return {
+      emptotal: 0,
+      deptotal: 0,
+      videototal: 0,
+    };
+  },
+  async mounted() {
+    let response = await this.$dashboardService.getDashboard();
+    this.emptotal = response.data.employees;
+    this.deptotal = response.data.departments;
+    this.videototal = response.data.videos;
+  },
 };
 </script>
 

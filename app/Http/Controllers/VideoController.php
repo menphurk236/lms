@@ -144,13 +144,14 @@ class VideoController extends Controller
     {
         DB::beginTransaction();
         try {
+
             $video = Video::find($id);
-            $video->category_video_id = $request->category_video_id;
-            $video->title = $request->title;
-            $video->video_duration = $request->video_duration;
-            $video->video_path= $request->video_path;
+            $video->category_video_id = $request->category_video_id != null ? $request->category_video_id : $video->category_video_id;
+            $video->title = $request->title != null ? $request->title : $video->title;
+            $video->video_duration = $request->video_duration != null ? $request->video_duration : $video->video_duration;
+            $video->video_path= $request->video_path != null ? $request->file('video_path')->storeAs('video',$request->file('video_path')->getClientOriginalName() . '.' . $request->file('video_path')->getClientOriginalExtension()) : $video->video_path;
             $video->updated_by = auth()->user()->id;
-            $video->created_upload = $request->created_upload;
+            $video->created_upload = $request->created_upload != null ? $request->created_upload : $video->created_upload;
             $video->updated_at = now();
             $video->save();
             DB::commit();
