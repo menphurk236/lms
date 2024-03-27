@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController as SecUserController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,11 +62,19 @@ Route::group(['middleware' => 'guest:api'], function () {
 
     // Route::post('email/verify/{user}', [VerificationController::class, 'verify'])->name('verification.verify');
     // Route::post('email/resend', [VerificationController::class, 'resend']);
-        Route::group(['prefix'=>'master','as'=>'master.'], function(){
+
+    Route::get('result', [HomeController::class, 'result'])->name('result');
+    Route::get(
+        '/videos/{id}',
+        [HomeController::class, 'stream']
+    )->name('stream');
+});
+
+
+    Route::group(['prefix'=>'master','as'=>'master.'], function(){
         Route::get('category-video', [MasterController::class, 'CategoryVideo'])->name('category-video');
         Route::get('department', [MasterController::class, 'Department'])->name('department');
         Route::get('employee', [MasterController::class, 'Employee'])->name('employee');
         Route::get('employee-by-department/{id}', [MasterController::class, 'EmployeeByDepartment'])->name('employee-by-department');
         Route::get('video', [MasterController::class, 'Video'])->name('video');
     });
-});

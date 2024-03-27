@@ -55,8 +55,7 @@ export default {
     user: "auth/user",
   }),
   created() {
-    console.log(this.$route.path === "/login" || this.user);
-    if (this.user && this.$route.path === "/login") {
+    if (this.user) {
       this.$router.push("/dashboard"); // Redirect to login page if user is not logged in
     }
   },

@@ -103,6 +103,8 @@ class VideoController extends Controller
         DB::beginTransaction();
         try {
             $video = Video::find($id);
+            $video->department_id = MappingVideo::select('department_id')->where('video_id', $id)->get();
+            $video->employee_id = MappingVideo::select('employee_id')->where('video_id', $id)->get();
             DB::commit();
             return response()->json($video, 200);
         } catch (\Exception $e) {
@@ -143,15 +145,19 @@ class VideoController extends Controller
         DB::beginTransaction();
         try {
             $video = Video::find($id);
+            $video->category_video_id = $request->category_video_id;
             $video->title = $request->title;
-            $video->description = $request->description;
-            $video->video_url = $request->video_url;
-            $video->video_category_id = $request->video_category_id;
+            $video->video_duration = $request->video_duration;
+            $video->video_path= $request->video_path;
+            $video->updated_by = auth()->user()->id;
+            $video->created_upload = $request->created_upload;
+            $video->updated_at = now();
             $video->save();
             DB::commit();
             return response()->json($video, 201);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::alert($e->getMessage());
             return response()->json(['message' => 'Failed to update video', 'error' => $e->getMessage()], 500);
         }
     }

@@ -40,7 +40,7 @@
               <p>
                 <span class="d-lg-none d-md-block">Account</span>
                 <img
-                  :src="user.photo_url"
+                  :src="user.photo_url ? user.photo_url : ''"
                   class="rounded-circle"
                   width="32"
                   height="32"

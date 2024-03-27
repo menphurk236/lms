@@ -73,7 +73,7 @@
                       <b-button
                         @click="
                           $router.push({
-                            name: 'admin.video.edit',
+                            name: 'video.edit',
                             params: { id: props.row.id },
                           })
                         "

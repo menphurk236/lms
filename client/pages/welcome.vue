@@ -15,7 +15,7 @@
             </div>
             <div class="col-md-12 ml-auto">
               <div class="d-flex justify-content-center">
-                <form @submit.prevent="handleSubmit" autocomplete="nope">
+                <form @submit.prevent="handleSubmit()" autocomplete="nope">
                   <div class="form-row align-items-end">
                     <div class="form-group col">
                       <!-- <input
@@ -28,10 +28,15 @@
                         autocomplete="off"
                         required
                       /> -->
-                      <vue-bootstrap-typeahead
-                        v-model="query"
-                        placeholder="พิมพ์ชื่อตัวเอง 5 ตัวอักษรขึ้นไป"
+                      <vue-typeahead-bootstrap
                         :data="employees"
+                        v-model="query"
+                        :serializer="(item) => item.name"
+                        :minMatchingChars="5"
+                        :disabledValues="
+                          selectedquery ? [selectedquery.name] : []
+                        "
+                        placeholder="พิมพ์ชื่อตัวเอง 5 ตัวอักษรขึ้นไป"
                       />
                     </div>
 
@@ -56,18 +61,18 @@
 </template>
 
 <script>
-import VueBootstrapTypeahead from "vue-bootstrap-typeahead";
-import { mapGetters } from "vuex";
+import VueTypeaheadBootstrap from "vue-typeahead-bootstrap";
 import Swal from "sweetalert2";
 
 export default {
   layout: "simple",
   components: {
-    VueBootstrapTypeahead,
+    VueTypeaheadBootstrap,
   },
   data: () => ({
     title: process.env.appName,
     query: "",
+    selectedquery: null,
     employees: [],
   }),
 
@@ -77,20 +82,11 @@ export default {
 
   methods: {
     async getEmployees() {
-      try {
-        const response = await this.$masterDataService.getEmployee();
-        this.employees = response.data.map((employee) => {
-          return {
-            id: employee.id,
-            name: employee.name,
-          };
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await this.$masterDataService.getEmployee();
+      this.employees = response.data;
+      console.log(this.employees);
     },
     async handleSubmit() {
-      console.log(this.query);
       if (this.query.length < 5) {
         Swal.fire({
           icon: "error",
@@ -98,7 +94,10 @@ export default {
           text: "กรุณากรอกชื่อตัวเอง 5 ตัวอักษรขึ้นไป",
         });
       } else {
-        this.$router.push({ name: "result", query: { search: this.query } });
+        this.$router.push({
+          name: "traning",
+          query: { search: this.query },
+        });
       }
     },
   },
@@ -106,29 +105,5 @@ export default {
   head() {
     return { title: this.$t("home") };
   },
-
-  computed: mapGetters({
-    authenticated: "auth/check",
-  }),
 };
 </script>
-
-<style scoped>
-.top-right {
-  position: absolute;
-  right: 10px;
-  top: 18px;
-}
-
-.title {
-  font-size: 85px;
-}
-
-.laravel {
-  color: #2e495e;
-}
-
-.nuxt {
-  color: #00c48d;
-}
-</style>

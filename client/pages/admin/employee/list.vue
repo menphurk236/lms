@@ -16,58 +16,49 @@
               >
             </div>
 
-            <!-- <form
-              class="form-horizontal mt-2"
-              method="POST"
-              @submit.prevent="handleSubmit"
+            <form
+              action=""
+              method="GET"
+              class="form-inline pull-right pull-left-sm m-3"
             >
-              <div class="row">
-                <label class="col-form-label" style="font-size: 1em"
-                  >รหัสหมวด</label
-                >
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      :class="{
-                        'is-invalid': $v.form.code.$error,
-                      }"
-                      v-model="form.code"
-                      class="form-control input-sm"
-                    />
-                    <div v-if="!$v.form.code.required" class="invalid-feedback">
-                      กรุณากรอกรหัสหมวด
-                    </div>
-                  </div>
+              <div class="form-row align-items-end">
+                <div class="form-group col-8 mr-1">
+                  <label class="sr-only" for="search">Search</label>
+                  <input
+                    type="text"
+                    class="form-control input-search"
+                    name="q"
+                    wire:model="search"
+                    id="search"
+                    placeholder="ค้นหา"
+                  />
                 </div>
-                <label class="col-form-label" style="font-size: 1em"
-                  >ชื่อหมวด</label
-                >
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      :class="{
-                        'is-invalid': $v.form.name.$error,
-                      }"
-                      v-model="form.name"
-                      class="form-control input-sm"
-                    />
-                    <div v-if="!$v.form.name.required" class="invalid-feedback">
-                      กรุณากรอกชื่อหมวด
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <button type="submit" class="btn btn-primary btn-sm">
-                    บันทึก
-                  </button>
-                  <button type="reset" class="btn btn-info btn-sm">
-                    ยกเลิก
+
+                <div class="form-group col-auto">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="margin: 0"
+                  >
+                    ค้นหา
                   </button>
                 </div>
               </div>
-            </form> -->
+            </form>
+            <div class="clearfix"></div>
+            <div class="col-sm-12">
+              <div class="btn-group pull-right">
+                <button
+                  type="submit"
+                  id="export_csv_data"
+                  name="export_csv_data"
+                  value="Export to CSV"
+                  class="btn btn-info btn-sm btn-round"
+                >
+                  Export to CSV
+                </button>
+              </div>
+            </div>
             <div class="table-responsive-md">
               <vue-good-table
                 mode="remote"

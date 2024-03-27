@@ -12,4 +12,8 @@ export class MasterDataService {
   async getEmployee() {
     return await this.$axios.get('/master/employee')
   }
+
+  async getCategoryVideo() {
+    return await this.$axios.get('/master/category-video')
+  }
 }

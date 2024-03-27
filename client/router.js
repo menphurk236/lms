@@ -8,6 +8,7 @@ const page = path => () => import(`~/pages/${path}`).then(m => m.default || m)
 
 const routes = [
   { path: '/', name: 'welcome', component: page('welcome.vue') },
+  { path: '/traning', name: 'traning', component: page('learn_traning.vue') },
 
   { path: '/login', name: 'login', component: page('auth/login.vue') },
   // { path: '/register', name: 'register', component: page('auth/register.vue') },
@@ -72,7 +73,8 @@ const routes = [
       { path: '', redirect: { name: 'video.list' } },
       { path: 'list', name: 'video.list', component: page('admin/video/list.vue') },
       { path: 'create', name: 'video.create', component: page('admin/video/create.vue') },
-      { path: ':id', name: 'video.view', component: page('admin/video/view.vue') }
+      { path: 'view/:id', name: 'video.view', component: page('admin/video/view.vue') },
+      { path: 'edit/:id', name: 'video.edit', component: page('admin/video/edit.vue') }
     ]
   },
   {
