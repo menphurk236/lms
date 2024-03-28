@@ -111,6 +111,7 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
 export default {
   async asyncData({ app: { $employeeService } }) {
     // use the user service to get a list of user
@@ -160,7 +161,46 @@ export default {
       ];
     },
   },
-  methods: {},
+  methods: {
+    async delete_employee(id) {
+      const { value } = await Swal.fire({
+        title: "คุณแน่ใจหรือไม่?",
+        text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ใช่, ลบข้อมูล!",
+      });
+      if (value) {
+        await this.$employeeService.deleteEmployee(id);
+        this.employees = this.employees.filter(
+          (employee) => employee.id !== id
+        );
+        Swal.fire("ลบพนักงานเรียบร้อย!", "", "success");
+      }
+    },
+    async delete_by_selected() {
+      const { value } = await Swal.fire({
+        title: "คุณแน่ใจหรือไม่?",
+        text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ใช่, ลบข้อมูล!",
+      });
+      if (value) {
+        const selected = this.$refs.vgtTableRef.selectedRows;
+        for (let i = 0; i < selected.length; i++) {
+          await this.$employeeService.deleteEmployee(selected[i].id);
+          this.employees = this.employees.filter(
+            (employee) => employee.id !== selected[i].id
+          );
+        }
+      }
+    },
+  },
 };
 </script>
 

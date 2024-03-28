@@ -21,7 +21,7 @@ class VideoController extends Controller
     {
         DB::beginTransaction();
         try {
-            $videos = Video::all();
+            $videos = Video::with('user', 'categoryvideo')->get();
             DB::commit();
             return response()->json($videos, 200);
         } catch (\Exception $e) {

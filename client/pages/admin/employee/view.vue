@@ -171,7 +171,8 @@ export default {
           this.form
         );
       this.employeeModelAddVideo = false;
-      this.$fetch();
+      this.$nuxt.refresh();
+      window.location.reload();
     },
     async delete_employeeVideo(id) {
       const { value } = await Swal.fire({

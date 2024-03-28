@@ -87,13 +87,13 @@
                         ><i class="far fa-trash-alt"></i
                       ></b-button>
                     </span>
-                    <!-- {{
-                      props.column.field == "role"
-                        ? props.row.role !== null
-                          ? props.row.role.name
+                    {{
+                      props.column.field == "user"
+                        ? props.row.user !== null
+                          ? props.row.user.name
                           : ""
                         : props.row[props.column.field]
-                    }} -->
+                    }}
                   </template>
                 </vue-good-table>
               </div>
@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
 export default {
   async asyncData({ app: { $videoService } }) {
     // use the user service to get a list of user
@@ -138,6 +139,13 @@ export default {
           sortable: true,
         },
         {
+          label: "ผู้สร้าง",
+          field: "user",
+          tdClass: "text-center",
+          thClass: "text-center",
+          sortable: true,
+        },
+        {
           label: "จัดการ",
           field: "actions",
           html: true,
@@ -148,7 +156,44 @@ export default {
       ];
     },
   },
-  methods: {},
+  methods: {
+    async delete_video(id) {
+      const { value } = await Swal.fire({
+        title: "คุณแน่ใจหรือไม่?",
+        text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ใช่, ลบข้อมูล!",
+      });
+      if (value) {
+        await this.$videoService.deleteVideo(id);
+        this.videos = this.videos.filter((video) => video.id !== id);
+        Swal.fire("ลบวิดิโอเรียบร้อย!", "", "success");
+      }
+    },
+    async delete_by_selected() {
+      const { value } = await Swal.fire({
+        title: "คุณแน่ใจหรือไม่?",
+        text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ใช่, ลบข้อมูล!",
+      });
+      if (value) {
+        const selected = this.$refs.vgtTableRef.selectedRows;
+        for (let i = 0; i < selected.length; i++) {
+          await this.$videoService.deleteVideo(selected[i].id);
+          this.videos = this.videos.filter(
+            (video) => video.id !== selected[i].id
+          );
+        }
+      }
+    },
+  },
 };
 </script>
 
