@@ -13,11 +13,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         DB::beginTransaction();
         try {
-            $users = User::with('role')->latest()->get();
+            $users = User::with('role')->where(function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->q}%")
+                ->orWhere('username', 'like', "%{$request->q}%");
+            })->latest()->get();
             DB::commit();
             return response()->json($users, 200);
         } catch (\Exception $e) {

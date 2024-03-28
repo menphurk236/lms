@@ -8,8 +8,8 @@ export class VideoService {
     return await this.$axios.get('/videos/create')
   }
 
-  async getVideos() {
-    return await this.$axios.get('/videos')
+  async getVideos(q) {
+    return await this.$axios.get(`/videos?q=${q}`)
   }
 
   async getVideo(id) {

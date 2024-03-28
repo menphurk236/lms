@@ -5,8 +5,8 @@ export class UserService {
     this.$axios = axios;
   }
 
-  async getUsers() {
-    return await this.$axios.get("/users");
+  async getUsers(q) {
+    return await this.$axios.get(`/users?q=${q}`);
   }
 
   async getUser(id) {

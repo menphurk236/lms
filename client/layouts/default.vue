@@ -98,4 +98,30 @@ $(document).on("click", ".navbar-toggle", function () {
   //nowuiDashboard.misc.navbar_menu_visible = 1;
   //}
 });
+
+$(window).resize(function () {
+  // reset the seq for charts drawing animations
+  seq = seq2 = 0;
+
+  if ($(".full-screen-map").length == 0 && $(".bd-docs").length == 0) {
+    let $navbar = $(".navbar");
+    isExpanded = $(".navbar")
+      .find('[data-toggle="collapse"]')
+      .attr("aria-expanded");
+    if ($navbar.hasClass("bg-white") && $(window).width() > 991) {
+      if (scrollElement.scrollTop() == 0) {
+        $navbar.removeClass("bg-white").addClass("navbar-transparent");
+      }
+    } else if (
+      $navbar.hasClass("navbar-transparent") &&
+      $(window).width() < 991 &&
+      isExpanded != "false"
+    ) {
+      $navbar.addClass("bg-white").removeClass("navbar-transparent");
+    }
+  }
+  if (is_iPad) {
+    $("body").removeClass("sidebar-mini");
+  }
+});
 </script>

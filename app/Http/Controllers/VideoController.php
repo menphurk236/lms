@@ -17,11 +17,13 @@ class VideoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         DB::beginTransaction();
         try {
-            $videos = Video::with('user', 'categoryvideo')->get();
+            $videos = Video::with('user', 'categoryvideo')->where(function ($query) use ($request) {
+                $query->where('title', 'like', "%{$request->q}%");
+            })->latest()->get();
             DB::commit();
             return response()->json($videos, 200);
         } catch (\Exception $e) {

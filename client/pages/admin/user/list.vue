@@ -20,7 +20,7 @@
                 >
               </div>
               <form
-                action=""
+                @submit.prevent="getDataUser()"
                 method="GET"
                 class="form-inline pull-right pull-left-sm m-3"
               >
@@ -30,7 +30,7 @@
                     <input
                       type="text"
                       class="form-control input-search"
-                      name="q"
+                      v-model="q"
                       id="search"
                       placeholder="ค้นหา"
                     />
@@ -102,19 +102,19 @@
 
 <script>
 export default {
-  async asyncData({ app: { $userService } }) {
-    // use the user service to get a list of user
-    const { data: users } = await $userService.getUsers();
-
-    return { users };
+  data() {
+    return {
+      q: "",
+      users: [],
+    };
   },
-  // created() {
-  //   this.getDataUser();
-  // },
+  created() {
+    this.getDataUser();
+  },
   methods: {
     async getDataUser() {
       // access and call the users service via the Vue component instance
-      const { data: users } = await this.$userService.getUsers();
+      const { data: users } = await this.$userService.getUsers(this.q);
       this.users = users;
     },
   },

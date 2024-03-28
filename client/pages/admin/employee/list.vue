@@ -17,7 +17,7 @@
             </div>
 
             <form
-              action=""
+              @submit.prevent="getEmployees"
               method="GET"
               class="form-inline pull-right pull-left-sm m-3"
             >
@@ -27,8 +27,7 @@
                   <input
                     type="text"
                     class="form-control input-search"
-                    name="q"
-                    wire:model="search"
+                    v-model="q"
                     id="search"
                     placeholder="ค้นหา"
                   />
@@ -113,11 +112,14 @@
 <script>
 import Swal from "sweetalert2";
 export default {
-  async asyncData({ app: { $employeeService } }) {
-    // use the user service to get a list of user
-    const { data: employees } = await $employeeService.getEmployees();
-
-    return { employees };
+  data() {
+    return {
+      q: "",
+      employees: [],
+    };
+  },
+  created() {
+    this.getEmployees();
   },
   computed: {
     columns() {
@@ -162,6 +164,12 @@ export default {
     },
   },
   methods: {
+    async getEmployees() {
+      const { data: employees } = await this.$employeeService.getEmployees(
+        this.q
+      );
+      this.employees = employees;
+    },
     async delete_employee(id) {
       const { value } = await Swal.fire({
         title: "คุณแน่ใจหรือไม่?",

@@ -14,11 +14,14 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         DB::beginTransaction();
         try {
-            $employees = Employee::with('department')->get();
+            $employees = Employee::with('department')->where(function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->q}%")
+                ->orWhere('code', 'like', "%{$request->q}%");
+            })->latest()->get();
             DB::commit();
             return response()->json($employees, 200);
         } catch (\Exception $e) {

@@ -5,8 +5,8 @@ export class EmployeeService {
     this.$axios = axios
   }
 
-  async getEmployees() {
-    return await this.$axios.get('/employees')
+  async getEmployees(q) {
+    return await this.$axios.get(`/employees?q=${q}`)
   }
 
   async getEmployee(id) {

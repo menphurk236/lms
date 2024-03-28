@@ -20,7 +20,7 @@
                 >
               </div>
               <form
-                action=""
+                @submit.prevent="getVideos"
                 method="GET"
                 class="form-inline pull-right pull-left-sm m-3"
               >
@@ -30,7 +30,7 @@
                     <input
                       type="text"
                       class="form-control input-search"
-                      name="q"
+                      v-model="q"
                       id="search"
                       placeholder="ค้นหา"
                     />
@@ -108,11 +108,14 @@
 <script>
 import Swal from "sweetalert2";
 export default {
-  async asyncData({ app: { $videoService } }) {
-    // use the user service to get a list of user
-    const { data: videos } = await $videoService.getVideos();
-
-    return { videos };
+  data() {
+    return {
+      q: "",
+      videos: [],
+    };
+  },
+  created() {
+    this.getVideos();
   },
   computed: {
     columns() {
@@ -157,6 +160,10 @@ export default {
     },
   },
   methods: {
+    async getVideos() {
+      const { data: videos } = await this.$videoService.getVideos(this.q);
+      this.videos = videos;
+    },
     async delete_video(id) {
       const { value } = await Swal.fire({
         title: "คุณแน่ใจหรือไม่?",
