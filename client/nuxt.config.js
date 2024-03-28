@@ -56,7 +56,8 @@ module.exports = {
     '~plugins/services.plugin.js',
     { src: '~/plugins/vue-good-table', mode: 'client' },
     '~/plugins/v-select',
-    '~plugins/vuelidate.js'
+    '~plugins/vuelidate.js',
+    { src: "~/plugins/jquery", mode: "client" }
   ],
 
   modules: [
