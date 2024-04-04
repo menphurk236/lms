@@ -13,6 +13,11 @@ class Department extends Model
         'name', 'created_by', 'updated_by', 'created_at', 'updated_at'
     ];
 
+    public function mappingvideo()
+    {
+        return $this->hasMany(MappingVideo::class);
+    }
+
 
     public function user()
     {

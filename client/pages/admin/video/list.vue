@@ -121,13 +121,6 @@ export default {
     columns() {
       return [
         {
-          label: "รหัสวิดิโอ",
-          field: "id",
-          tdClass: "text-center",
-          thClass: "text-center",
-          sortable: true,
-        },
-        {
           label: "ชื่อวิดิโอ",
           field: "title",
           tdClass: "text-center",
@@ -143,6 +136,12 @@ export default {
         },
         {
           label: "ผู้สร้าง",
+          field: "created_upload",
+          tdClass: "text-center",
+          thClass: "text-center",
+        },
+        {
+          label: "ผู้อัพโหลด",
           field: "user",
           tdClass: "text-center",
           thClass: "text-center",

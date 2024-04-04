@@ -20,33 +20,52 @@
               <h4><span>เปอร์เซ็นต์ที่ดู</span>0%</h4>
             </div>
             <div class="table-responsive">
-              <table class="table">
-                <thead class="text-primary">
-                  <th>ลำดับ</th>
-                  <th>หมวด</th>
-                  <th>ชื่อ Video</th>
-                  <th>ความยาว</th>
-                  <th>ผู้สร้าง</th>
-                  <th class="text-right">Action</th>
-                </thead>
-                <tbody>
-                  <tr v-for="empvideo in employeeVideos" :key="empvideo">
-                    <td>{{ 1 }}</td>
-                    <td>{{ empvideo.video.categoryvideo.name }}</td>
-                    <td>{{ empvideo.video.title }}</td>
-                    <td>{{ empvideo.video.video_duration }}</td>
-                    <td>-</td>
-                    <td class="td-actions">
-                      <button
-                        class="btn btn-danger btn-icon btn-sm"
-                        @click="delete_employeeVideo(empvideo.id)"
-                      >
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <vue-good-table
+                mode="remote"
+                :columns="columns"
+                :rows="employeeVideos"
+                :pagination-options="{
+                  enabled: true,
+                  mode: 'records',
+                }"
+                :line-numbers="true"
+                style-class="tableOne vgt-table"
+              >
+                <div slot="selected-row-actions">
+                  <button class="btn btn-danger" @click="delete_by_selected()">
+                    {{ $t("Del") }}
+                  </button>
+                </div>
+                <template slot="table-row" slot-scope="props">
+                  <span v-if="props.column.field == 'actions'">
+                    <b-button
+                      class="btn btn-danger btn-icon btn-sm"
+                      @click="delete_employeeVideo(props.row.id)"
+                      variant="outline-danger"
+                      ><i class="far fa-trash-alt"></i
+                    ></b-button>
+                  </span>
+                  {{
+                    props.column.field == "categoryvideo"
+                      ? props.row.video.categoryvideo.name
+                      : props.row[props.column.field]
+                  }}
+                  {{
+                    props.column.field == "videotitle"
+                      ? props.row.video !== null
+                        ? props.row.video.title
+                        : ""
+                      : props.row[props.column.field]
+                  }}
+                  {{
+                    props.column.field == "video_duration"
+                      ? props.row.video !== null
+                        ? props.row.video.video_duration
+                        : ""
+                      : props.row[props.column.field]
+                  }}
+                </template>
+              </vue-good-table>
             </div>
 
             <center>
@@ -83,7 +102,7 @@
                           v-if="!$v.form.video_id.required"
                           class="invalid-feedback"
                         >
-                          กรุณาเลือกแผนกพนักงาน
+                          กรุณาเลือกวิดิโอ
                         </div>
                       </div>
                     </div>
@@ -135,7 +154,7 @@ export default {
   },
   async asyncData({ app: { $videoService } }) {
     // use the user service to get a list of user
-    const { data: videos } = await $videoService.getVideos();
+    const { data: videos } = await $videoService.getVideos("");
 
     return { videos };
   },
@@ -203,43 +222,29 @@ export default {
     columns() {
       return [
         {
-          label: "ชื่อแผนก",
-          field: "department",
-          tdClass: "text-center",
-          thClass: "text-center",
-          sortable: true,
-        },
-        {
-          label: "รหัสพนักงาน",
-          field: "code",
+          label: "หมวด",
+          field: "categoryvideo",
           tdClass: "text-center",
           thClass: "text-center",
           sortable: false,
         },
         {
-          label: "ชื่อ-นามสกุล",
-          field: "name",
+          label: "ชื่อวิดิโอ",
+          field: "videotitle",
           tdClass: "text-center",
           thClass: "text-center",
           sortable: true,
         },
         {
-          label: "เปอร์เซ็นต์ที่ดู",
+          label: "ความยาว",
           field: "video_duration",
           tdClass: "text-center",
           thClass: "text-center",
           sortable: true,
         },
         {
-          label: "วันที่สร้าง",
-          field: "created_at",
-          tdClass: "text-center",
-          thClass: "text-center",
-          sortable: true,
-        },
-        {
-          label: "วันที่แก้ไข",
-          field: "updated_at",
+          label: "ผู้อัพวิดิโอ",
+          field: "created_upload",
           tdClass: "text-center",
           thClass: "text-center",
           sortable: true,

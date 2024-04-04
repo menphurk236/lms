@@ -150,6 +150,7 @@
                   <div class="form-group">
                     <v-select
                       multiple
+                      v-model="department_id"
                       :options="departments"
                       :reduce="(item) => item.id"
                       @option:selected="
@@ -169,6 +170,7 @@
                   <div class="form-group">
                     <v-select
                       multiple
+                      v-model="employee_id"
                       :options="employees"
                       :reduce="(item) => item.id"
                       @option:selected="(employees) => onSelectedEmp(employees)"
@@ -255,7 +257,7 @@ export default {
     },
     async employeebydepartment() {
       const response = await axios.get(
-        "master/employee-by-department/" + this.department_id
+        "master/employee-by-department/?search=" + this.department_id
       );
       this.employees = response.data;
     },
@@ -272,12 +274,12 @@ export default {
 
     onSelectedDepartment: function (opt) {
       this.department_id = opt.map((item) => item.id);
-      console.log(this.department_id);
       this.employeebydepartment();
     },
 
     onDeselectedDepartment: function () {
       this.department_id = [];
+      this.employee_id = "";
     },
 
     onSelectedEmp: function (opt) {

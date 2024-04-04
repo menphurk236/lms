@@ -50,11 +50,12 @@ class MasterController extends Controller
         }
     }
 
-    public function EmployeeByDepartment($id)
+    public function EmployeeByDepartment(Request $request)
     {
         DB::beginTransaction();
         try {
-            $employee = Employee::where('department_id', $id)->get();
+            $search = explode(',', $request->input('search'));
+            $employee = Employee::whereIn('department_id', $search)->get();
             DB::commit();
             return response()->json($employee, 200);
         } catch (\Exception $e) {

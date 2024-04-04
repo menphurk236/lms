@@ -150,6 +150,7 @@
                   <div class="form-group">
                     <v-select
                       multiple
+                      v-model="department_id"
                       :options="departments"
                       :reduce="(item) => item.id"
                       @option:selected="
@@ -169,6 +170,7 @@
                   <div class="form-group">
                     <v-select
                       multiple
+                      v-model="employee_id"
                       :options="employees"
                       :reduce="(item) => item.id"
                       @option:selected="(employees) => onSelectedEmp(employees)"
@@ -255,6 +257,8 @@ export default {
       const { id } = this.$route.params;
       const { data: video } = await this.$videoService.getVideo(id);
       this.form = video;
+      this.department_id = video.department_id.map((item) => item.id);
+      this.employee_id = video.employee_id.map((item) => item.id);
     },
     async department() {
       const response = await this.$masterDataService.getDepartment();
@@ -262,9 +266,10 @@ export default {
     },
     async employeebydepartment() {
       const response = await axios.get(
-        "master/employee-by-department/" + this.department_id
+        "master/employee-by-department/?search=" + this.department_id
       );
       this.employees = response.data;
+      console.log(this.department_id);
     },
     async category() {
       const response = await this.$masterDataService.getCategoryVideo();
@@ -279,7 +284,6 @@ export default {
 
     onSelectedDepartment: function (opt) {
       this.department_id = opt.map((item) => item.id);
-      console.log(this.department_id);
       this.employeebydepartment();
     },
 

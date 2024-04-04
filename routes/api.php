@@ -75,6 +75,6 @@ Route::group(['middleware' => 'guest:api'], function () {
         Route::get('category-video', [MasterController::class, 'CategoryVideo'])->name('category-video');
         Route::get('department', [MasterController::class, 'Department'])->name('department');
         Route::get('employee', [MasterController::class, 'Employee'])->name('employee');
-        Route::get('employee-by-department/{id}', [MasterController::class, 'EmployeeByDepartment'])->name('employee-by-department');
+        Route::get('employee-by-department', [MasterController::class, 'EmployeeByDepartment'])->name('employee-by-department');
         Route::get('video', [MasterController::class, 'Video'])->name('video');
     });

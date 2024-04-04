@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Employee;
 use App\Models\MappingVideo;
 use Illuminate\Support\Facades\Log;
+use App\Models\Department;
 
 class VideoController extends Controller
 {
@@ -72,8 +73,6 @@ class VideoController extends Controller
             'created_upload' => $request->created_upload
         ])->id;
 
-        Log::info("message:", $request->get('employee_id'));
-
         foreach ($request->employee_id as $key) {
             $value = trim($key);
             if ($value !== '') {
@@ -105,8 +104,12 @@ class VideoController extends Controller
         DB::beginTransaction();
         try {
             $video = Video::find($id);
-            $video->department_id = MappingVideo::select('department_id')->where('video_id', $id)->get();
-            $video->employee_id = MappingVideo::select('employee_id')->where('video_id', $id)->get();
+            $video->department_id = Department::whereHas('mappingvideo', function($q) use ($id){
+                    $q->where('video_id', $id);
+                })->get();
+            $video->employee_id = Employee::whereHas('mappingvideo', function($q) use ($id){
+                    $q->where('video_id', $id);
+                })->get();
             DB::commit();
             return response()->json($video, 200);
         } catch (\Exception $e) {
