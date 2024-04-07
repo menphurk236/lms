@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\MappingVideo;
 use Illuminate\Support\Facades\Log;
 use App\Models\Department;
+use Illuminate\Support\Str;
 
 class VideoController extends Controller
 {
@@ -59,14 +60,16 @@ class VideoController extends Controller
         DB::beginTransaction();
         try {
             /* Storing the file on the disk  */
-            $path = $request->file('video_path')->storeAs(
-                'video',
-                $request->file('video_path')->getClientOriginalName() . '.' . $request->file('video_path')->getClientOriginalExtension()
-            );
+            $extension = $request->file('video_path')->getClientOriginalExtension();
+            $fileName = Str::random(5)."-".date('his')."-".Str::random(3).".".$extension;
             $id = Video::create([
             'category_video_id' => $request->category_video_id,
             'title' => $request->title,
-            'video_path' => $path,
+            'video_path' => $request->file('video_path')->storeAs(
+                'video',
+                $fileName,
+                'public'
+            ),
             'video_duration' => $request->video_duration,
             'created_by' => auth()->user()->id,
             'updated_by' => auth()->user()->id,

@@ -118,8 +118,10 @@
                     controls
                     disablePictureInPicture
                     controlsList="nodownload"
+                    :src="videos.video_url"
+                    v-play="playing"
                   >
-                    <source src="" type="video/mp4" />
+                    <source :src="videos.video_url" type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>
@@ -158,10 +160,14 @@
                       </th>
                     </thead>
                     <tbody>
-                      <tr v-for="item in video" :key="item">
-                        <td>1</td>
+                      <tr v-for="(item, index) in video" :key="item">
+                        <td>{{ index + 1 }}</td>
                         <td>{{ item.categoryvideo.name }}</td>
-                        <td>{{ item.title }}</td>
+                        <td>
+                          <a href="#" @click="play(item.id)">{{
+                            item.title
+                          }}</a>
+                        </td>
                         <td>{{ item.video_duration }}</td>
                         <td>{{ item.created_by != null ? "-" : "-" }}</td>
                         <td class="text-right"></td>
@@ -258,10 +264,39 @@ export default {
       department: {},
     },
     videos: [],
+    playing: false,
   }),
   created() {
-    console.log("created", this.$route.query.search);
+    //console.log("created", this.$route.query.search);
     this.getResultEmp();
+  },
+  computed: {
+    paused() {
+      return !this.playing;
+    },
+  },
+  directives: {
+    play: {
+      bind(el, binding, vnode) {
+        console.log("binding: " + binding.arg);
+        el.addEventListener("playing", () => {
+          vnode.context[binding.expression] = !el.paused;
+        });
+        el.addEventListener("pause", () => {
+          vnode.context[binding.expression] = !el.paused;
+        });
+        vnode.context[binding.expression] = !el.paused;
+      },
+      update(el, binding) {
+        if (el.paused) {
+          if (binding.value) {
+            el.play();
+          }
+        } else if (!binding.value) {
+          el.pause();
+        }
+      },
+    },
   },
   methods: {
     async getResultEmp() {
@@ -275,6 +310,13 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    async play(id) {
+      this.playing = !this.playing;
+      this.videos = this.video.find((video) => video.id === id);
+    },
+    async pause() {
+      this.playing = false;
     },
   },
 };

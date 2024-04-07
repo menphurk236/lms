@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Iman\Streamer\VideoStreamer;
+use Illuminate\Support\Facades\Storage;
 
 class Video extends Model
 {
@@ -18,6 +20,23 @@ class Video extends Model
         'video_duration',
         'created_upload'
     ];
+
+    protected $appends = [
+        'video_url',
+    ];
+
+
+    public function getVideoUrlAttribute()
+    {
+        if($this->video_path == null) {
+            return null;
+        }
+        if (Storage::disk('public')->exists($this->video_path)) {
+            return Storage::disk('public')->url($this->video_path);
+        }
+        return Storage::url($this->video_path);
+    }
+
 
     public function categoryvideo()
     {
