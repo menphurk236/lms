@@ -127,9 +127,13 @@
                 </div>
                 <div class="d-flex justify-content-center mb-2">
                   <div class="mr-5">
-                    <h4 class="font-medium text-heading-general"></h4>
+                    <h4 class="font-medium text-heading-general">
+                      {{ videos.title }}
+                    </h4>
                   </div>
-                  <h4 class="font-medium text-heading-general"></h4>
+                  <h4 class="font-medium text-heading-general">
+                    เวลา {{ videos.video_duration }} นาที
+                  </h4>
                 </div>
               </section>
               <section class="pt-4">
