@@ -28,13 +28,10 @@ class Video extends Model
 
     public function getVideoUrlAttribute()
     {
-        if($this->video_path == null) {
-            return null;
-        }
         if (Storage::disk('public')->exists($this->video_path)) {
             return Storage::disk('public')->url($this->video_path);
         }
-        return Storage::url($this->video_path);
+        return null;
     }
 
 
