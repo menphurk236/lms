@@ -120,6 +120,7 @@
                     controlsList="nodownload"
                     :src="videos.video_url"
                     v-play="playing"
+                    id="video"
                   >
                     <source :src="videos.video_url" type="video/mp4" />
                     Your browser does not support the video tag.
@@ -273,6 +274,15 @@ export default {
   created() {
     //console.log("created", this.$route.query.search);
     this.getResultEmp();
+    var video = document.getElementById("video");
+    video.addEventListener(
+      "loadeddata",
+      function () {
+        console.log("loadeddata");
+        video.play();
+      },
+      false
+    );
   },
   computed: {
     paused() {
@@ -282,7 +292,6 @@ export default {
   directives: {
     play: {
       bind(el, binding, vnode) {
-        console.log("binding: " + binding.arg);
         el.addEventListener("playing", () => {
           vnode.context[binding.expression] = !el.paused;
         });
@@ -325,6 +334,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

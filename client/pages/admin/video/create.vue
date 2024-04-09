@@ -257,7 +257,7 @@ export default {
     },
     async employeebydepartment() {
       const response = await axios.get(
-        "master/employee-by-department/?search=" + this.department_id
+        "master/employee-by-department?search=" + this.department_id
       );
       this.employees = response.data;
     },
