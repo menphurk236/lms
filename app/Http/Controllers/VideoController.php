@@ -76,16 +76,18 @@ class VideoController extends Controller
             'created_upload' => $request->created_upload
         ])->id;
 
-        foreach ($request->employee_id as $key) {
-            $value = trim($key);
-            if ($value !== '') {
-                $employee = Employee::where('id', $key)->firstOrFail();
-                $mapVideoReq = [
-                    'video_id' => $id,
-                    'employee_id' => $value,
-                    'department_id' => $employee['department_id']
-                ];
-                MappingVideo::insert($mapVideoReq);
+        if($request->employee_id != null){
+            foreach ($request->employee_id as $key) {
+                $value = trim($key);
+                if ($value !== '') {
+                    $employee = Employee::where('id', $key)->firstOrFail();
+                    $mapVideoReq = [
+                        'video_id' => $id,
+                        'employee_id' => $value,
+                        'department_id' => $employee['department_id']
+                    ];
+                    MappingVideo::insert($mapVideoReq);
+                }
             }
         }
             DB::commit();
@@ -162,8 +164,30 @@ class VideoController extends Controller
             $video->created_upload = $request->created_upload != null ? $request->created_upload : $video->created_upload;
             $video->updated_at = now();
             $video->save();
+
+            $mappingVideo = MappingVideo::where('video_id', $id)->firstOrFail();
+            if($mappingVideo != null){
+                $mappingVideo->employee_id = $request->employee_id != null ? $request->employee_id : $mappingVideo->employee_id;
+                $mappingVideo->department_id = $request->employee_id != null ? $request->employee_id : $mappingVideo->department_id;
+                $mappingVideo->save();
+            }else{
+                if($request->employee_id != null){
+                    foreach ($request->employee_id as $key) {
+                        $value = trim($key);
+                        if ($value !== '') {
+                            $employee = Employee::where('id', $key)->firstOrFail();
+                            $mapVideoReq = [
+                                'video_id' => $id,
+                                'employee_id' => $value,
+                                'department_id' => $employee['department_id']
+                            ];
+                            MappingVideo::insert($mapVideoReq);
+                        }
+                    }
+                }
+            }
             DB::commit();
-            return response()->json($video, 201);
+            return response()->json($video, 200);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::alert($e->getMessage());

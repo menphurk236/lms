@@ -119,8 +119,8 @@
                     disablePictureInPicture
                     controlsList="nodownload"
                     :src="videos.video_url"
-                    v-play="playing"
-                    id="video"
+                    @timeupdate="onTimeUpdate(videos.id, employee.id)"
+                    id="videoPlayer"
                   >
                     <source :src="videos.video_url" type="video/mp4" />
                     Your browser does not support the video tag.
@@ -262,6 +262,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   layout: "simple",
   data: () => ({
@@ -269,47 +270,10 @@ export default {
       department: {},
     },
     videos: [],
-    playing: false,
   }),
   created() {
     //console.log("created", this.$route.query.search);
     this.getResultEmp();
-    var video = document.getElementById("video");
-    video.addEventListener(
-      "loadeddata",
-      function () {
-        console.log("loadeddata");
-        video.play();
-      },
-      false
-    );
-  },
-  computed: {
-    paused() {
-      return !this.playing;
-    },
-  },
-  directives: {
-    play: {
-      bind(el, binding, vnode) {
-        el.addEventListener("playing", () => {
-          vnode.context[binding.expression] = !el.paused;
-        });
-        el.addEventListener("pause", () => {
-          vnode.context[binding.expression] = !el.paused;
-        });
-        vnode.context[binding.expression] = !el.paused;
-      },
-      update(el, binding) {
-        if (el.paused) {
-          if (binding.value) {
-            el.play();
-          }
-        } else if (!binding.value) {
-          el.pause();
-        }
-      },
-    },
   },
   methods: {
     async getResultEmp() {
@@ -317,7 +281,6 @@ export default {
         const response = await this.$homeService.getResult(
           this.$route.query.search
         );
-        console.log(response.data);
         this.employee = response.data.employee;
         this.video = response.data.video;
       } catch (error) {
@@ -325,11 +288,47 @@ export default {
       }
     },
     async play(id) {
-      this.playing = !this.playing;
       this.videos = this.video.find((video) => video.id === id);
     },
-    async pause() {
-      this.playing = false;
+    async onTimeUpdate(id, empId) {
+      //console.log("timeupdate");
+      //await this.$homeService.getUpdateStreamTime(id, empId);
+      var video = document.getElementById("videoPlayer");
+
+      video.addEventListener("pause", async function (e) {
+        // readyState = 4 ensures true pause interaction
+        if (video.readyState == 4) {
+          var formdata = new FormData();
+          formdata.append("video_id", id);
+          formdata.append("timespent", video.currentTime);
+          formdata.append("empId", empId);
+          //await this.$homeService.getUpdateStreamTime(id, formdata);
+          await axios.post(`/saveTimevideos/${id}`, formdata);
+        }
+      });
+      var isPaused = true; // Our video is initially on pause
+      video.addEventListener("pause", function (e) {
+        // readyState=4 ensures true pause event interaction
+        if (video.readyState == 4) {
+          isPaused = true;
+        }
+      });
+      video.addEventListener("play", function (e) {
+        // Make sure video is prev paused
+        if (isPaused) {
+          isPaused = false;
+        }
+      });
+      video.addEventListener("ended", async function (e) {
+        if (video.readyState == 4) {
+          var formdata = new FormData();
+          formdata.append("video_id", id);
+          formdata.append("timespent", video.currentTime);
+          formdata.append("empId", empId);
+          //await this.$homeService.getUpdateStreamTime(id, formdata);
+          await axios.post(`/saveTimevideos/${id}`, formdata);
+        }
+      });
     },
   },
 };

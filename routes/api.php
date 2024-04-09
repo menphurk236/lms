@@ -68,6 +68,10 @@ Route::group(['middleware' => 'guest:api'], function () {
         '/videos/{id}',
         [HomeController::class, 'stream']
     )->name('stream');
+    Route::post(
+        '/saveTimevideos/{id}',
+        [HomeController::class, 'updateVideoStream']
+    )->name('updateVideoStream');
 });
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\Video;
+use App\Models\EmployeeVideo;
 use DB;
 use Log;
 
@@ -45,5 +46,23 @@ class HomeController extends Controller
     {
         // Get the video file details from the database
         return Video::find($id);
+    }
+
+    public function updateVideoStream(Request $request, $id){
+        Log::info("message: ".$request->input('timespent')." id: ".$id." empId: ".$request->input('empId'));
+        $updateTime = EmployeeVideo::where('video_id', $id)->first();
+        if($updateTime != null){
+            $updateTime->timespent = $request->input('timespent');
+            $updateTime->employee_id = $request->input('empId');
+            $updateTime->video_id = $id;
+            $updateTime->save();
+            // return response()->json(['message' => 'Video time updated successfully'], 200);
+        }else{
+            $newTime = new EmployeeVideo();
+            $newTime->video_id = $id;
+            $newTime->timespent = $request->input('timespent');
+            $newTime->employee_id = $request->input('empId');
+            $newTime->save();
+        }
     }
 }
