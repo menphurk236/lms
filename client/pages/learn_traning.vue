@@ -78,7 +78,7 @@
                       style="font-size: 16px; font-weight: 400"
                       class="text-responsive"
                     >
-                      เปอร์เซ็นที่ดูวิดิโอทั้งหมด
+                      เปอร์เซ็นที่ดูวิดิโอทั้งหมด {{ employee.percent }}%
                     </h6>
                   </div>
                 </div>
@@ -175,7 +175,7 @@
                         </td>
                         <td>{{ item.video_duration }}</td>
                         <td>{{ item.created_by != null ? "-" : "-" }}</td>
-                        <td class="text-right"></td>
+                        <td class="text-right">ดูไม่สำเร็จ</td>
                       </tr>
                     </tbody>
                   </table>
@@ -218,25 +218,13 @@
                     style="margin-bottom: 0; border: 1px solid #dee2e6"
                   >
                     <thead style="font-size: 11px; font-weight: 400">
-                      <th width="10%" data-field="id" data-sortable="true">
+                      <th width="10%">
                         <div class="truncate">ลำดับ</div>
                       </th>
-                      <th
-                        width="10%"
-                        data-field="categoryvideo"
-                        data-sortable="true"
-                      >
+                      <th width="10%">
                         <div class="truncate">หมวด</div>
                       </th>
-                      <th width="10%">
-                        <div class="truncate">รหัส</div>
-                      </th>
-                      <th
-                        width="34%"
-                        class="text-center"
-                        data-field="name"
-                        data-sortable="true"
-                      >
+                      <th width="34%" class="text-center">
                         <div class="truncate">ชื่อ Video</div>
                       </th>
                       <th data-sortable="true">
@@ -249,7 +237,30 @@
                         <div class="truncate">สถานะ</div>
                       </th>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                      <tr v-for="(item, index) in resultVideo" :key="item">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ item.video.categoryvideo.name }}</td>
+                        <td>
+                          <a href="#" @click="play(item.id)">{{
+                            item.video.title
+                          }}</a>
+                        </td>
+                        <td>{{ item.video.video_duration }}</td>
+                        <td>{{ item.created_by != null ? "-" : "-" }}</td>
+                        <td class="text-right">
+                          <span
+                            v-if="item.timespent === item.video.video_duration"
+                          >
+                            ดูแล้ว
+                          </span>
+                          <span v-else-if="item.timespent === 0">
+                            ดูไม่สำเร็จ
+                          </span>
+                          <span v-else>ดูไม่สำเร็จ</span>
+                        </td>
+                      </tr>
+                    </tbody>
                   </table>
                 </div>
               </section>
@@ -270,6 +281,7 @@ export default {
       department: {},
     },
     videos: [],
+    resultVideo: [],
   }),
   created() {
     //console.log("created", this.$route.query.search);
@@ -283,6 +295,7 @@ export default {
         );
         this.employee = response.data.employee;
         this.video = response.data.video;
+        this.resultVideo = response.data.resultVideo;
       } catch (error) {
         console.error(error);
       }

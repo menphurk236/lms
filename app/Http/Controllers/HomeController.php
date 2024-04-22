@@ -19,10 +19,12 @@ class HomeController extends Controller
             $video = Video::with('categoryvideo')->whereHas('mappingvideo', function ($q) use($employee) {
                         $q->where('employee_id', $employee->id);
             })->get();
+            $resultVideo = EmployeeVideo::with('video')->where('employee_id', $employee->id)->get();
 
             $data = [
                 'employee' => $employee,
-                'video' => $video
+                'video' => $video,
+                'resultVideo' => $resultVideo
             ];
             return response()->json($data, 200);
         }catch(\Exception $e){
@@ -49,7 +51,7 @@ class HomeController extends Controller
     }
 
     public function updateVideoStream(Request $request, $id){
-        Log::info("message: ".$request->input('timespent')." id: ".$id." empId: ".$request->input('empId'));
+        //Log::info("message: ".$request->input('timespent')." id: ".$id." empId: ".$request->input('empId'));
         $updateTime = EmployeeVideo::where('video_id', $id)->first();
         if($updateTime != null){
             $updateTime->timespent = $request->input('timespent');
