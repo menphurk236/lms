@@ -117,7 +117,7 @@
                     props.column.field == "user"
                       ? props.row.user !== null
                         ? props.row.user.name
-                        : ""
+                        : "-"
                       : props.row[props.column.field]
                   }}
                 </template>
@@ -177,12 +177,10 @@ export default {
       this.form = this.departments.find((department) => department.id === id);
     },
     async handleSubmit() {
-      console.log("handleSubmit", this.form.id);
       this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
-      console.log(this.form);
       if (this.form.id) {
         await this.$departmentService.updateDepartment(this.form.id, this.form);
       } else {
