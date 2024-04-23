@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['code', 'name', 'email', 'phone', 'address', 'department_id' , 'created_by', 'updated_by', 'created_at', 'updated_at'];
+    protected $fillable = ['code', 'name', 'email', 'phone', 'address', 'department_id' , 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at'];
 
     public function department()
     {

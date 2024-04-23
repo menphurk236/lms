@@ -15,7 +15,7 @@ class MasterController extends Controller
     {
         DB::beginTransaction();
         try {
-            $category = CategoryVideo::all();
+            $category = CategoryVideo::withTrashed()->get();
             DB::commit();
             return response()->json($category, 200);
         } catch (\Exception $e) {
@@ -28,7 +28,7 @@ class MasterController extends Controller
     {
         DB::beginTransaction();
         try {
-            $department = Department::all();
+            $department = Department::withTrashed()->get();
             DB::commit();
             return response()->json($department, 200);
         } catch (\Exception $e) {
@@ -41,7 +41,7 @@ class MasterController extends Controller
     {
         DB::beginTransaction();
         try {
-            $employee = Employee::all();
+            $employee = Employee::withTrashed()->get();
             DB::commit();
             return response()->json($employee, 200);
         } catch (\Exception $e) {
@@ -55,7 +55,7 @@ class MasterController extends Controller
         DB::beginTransaction();
         try {
             $search = explode(',', $request->input('search'));
-            $employee = Employee::whereIn('department_id', $search)->get();
+            $employee = Employee::whereIn('department_id', $search)->withTrashed()->get();
             DB::commit();
             return response()->json($employee, 200);
         } catch (\Exception $e) {
@@ -68,7 +68,7 @@ class MasterController extends Controller
     {
         DB::beginTransaction();
         try {
-            $video = Video::all();
+            $video = Video::withTrashed()->get();
             DB::commit();
             return response()->json($video, 200);
         } catch (\Exception $e) {

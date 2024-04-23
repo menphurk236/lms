@@ -25,7 +25,7 @@ class VideoController extends Controller
         try {
             $videos = Video::with('user', 'categoryvideo')->where(function ($query) use ($request) {
                 $query->where('title', 'like', "%{$request->q}%");
-            })->latest()->get();
+            })->latest()->withTrashed()->get();
             DB::commit();
             return response()->json($videos, 200);
         } catch (\Exception $e) {

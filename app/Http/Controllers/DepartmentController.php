@@ -20,7 +20,7 @@ class DepartmentController extends Controller
         try {
             $departments = Department::with('user')->where(function ($query) use ($request){
                            $query->where('id', 'like', "%{$request->q}%");
-                       })->latest()->get();
+                       })->latest()->withTrashed()->get();
             DB::commit();
             return response()->json($departments, 200);
         } catch (\Exception $e) {

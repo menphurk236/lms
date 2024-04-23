@@ -18,7 +18,7 @@ class CategoryController extends Controller
     {
         DB::beginTransaction();
         try {
-            $categories = CategoryVideo::all();
+            $categories = CategoryVideo::withTrashed()->get();
             DB::commit();
             return response()->json($categories, 200);
         } catch (\Exception $e) {

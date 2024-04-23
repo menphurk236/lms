@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Iman\Streamer\VideoStreamer;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Video extends Model
 {
-    use HasFactory;
+    use HasFactory ,SoftDeletes;
 
     protected $table = 'videos';
 

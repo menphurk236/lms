@@ -20,7 +20,7 @@ class UserController extends Controller
             $users = User::with('role')->where(function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request->q}%")
                 ->orWhere('username', 'like', "%{$request->q}%");
-            })->latest()->get();
+            })->latest()->withTrashed()->get();
             DB::commit();
             return response()->json($users, 200);
         } catch (\Exception $e) {
