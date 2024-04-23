@@ -310,12 +310,19 @@ export default {
 
       video.addEventListener("pause", async function (e) {
         // readyState = 4 ensures true pause interaction
+        var sec = video.currentTime;
+        const minutes = Math.floor(sec / 60);
+        const seconds = Math.floor(sec - minutes * 60);
+
+        const timespent = `${minutes < 10 ? `0${minutes}` : minutes}:${
+          seconds < 10 ? `0${seconds}` : seconds
+        }`; // result: 02:23
+
         if (video.readyState == 4) {
           var formdata = new FormData();
           formdata.append("video_id", id);
-          formdata.append("timespent", video.currentTime);
+          formdata.append("timespent", timespent);
           formdata.append("empId", empId);
-          //await this.$homeService.getUpdateStreamTime(id, formdata);
           await axios.post(`/saveTimevideos/${id}`, formdata);
         }
       });
@@ -333,13 +340,21 @@ export default {
         }
       });
       video.addEventListener("ended", async function (e) {
+        var sec = video.currentTime;
+        const minutes = Math.floor(sec / 60);
+        const seconds = Math.floor(sec - minutes * 60);
+
+        const timespent = `${minutes < 10 ? `0${minutes}` : minutes}:${
+          seconds < 10 ? `0${seconds}` : seconds
+        }`; // result: 02:23
         if (video.readyState == 4) {
           var formdata = new FormData();
           formdata.append("video_id", id);
-          formdata.append("timespent", video.currentTime);
+          formdata.append("timespent", timespent);
           formdata.append("empId", empId);
           //await this.$homeService.getUpdateStreamTime(id, formdata);
           await axios.post(`/saveTimevideos/${id}`, formdata);
+          window.location.reload(true);
         }
       });
     },
