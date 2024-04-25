@@ -18,10 +18,10 @@ class EmployeeController extends Controller
     {
         DB::beginTransaction();
         try {
-            $employees = Employee::with('department')->where(function ($query) use ($request) {
+            $employees = Employee::with('department')->whereNull('deleted_at')->where(function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request->q}%")
                 ->orWhere('code', 'like', "%{$request->q}%");
-            })->latest()->withTrashed()->get();
+            })->latest()->get();
             DB::commit();
             return response()->json($employees, 200);
         } catch (\Exception $e) {
@@ -74,7 +74,7 @@ class EmployeeController extends Controller
         DB::beginTransaction();
         try {
             $employee = Employee::with('department')->find($id);
-            $employeeVideos = MappingVideo::with('video')->where('employee_id', $id)->withTrashed()->get();
+            $employeeVideos = MappingVideo::with('video')->where('employee_id', $id)->whereNull('deleted_at')->get();
             $employee->employeeVideos = $employeeVideos;
             DB::commit();
             return response()->json($employee, 200);

@@ -18,8 +18,8 @@ class HomeController extends Controller
             $employee = Employee::with('department', 'mappingvideo')->where('name', 'LIKE', "%{$request->q}%")->firstOrFail();
             $video = Video::with('categoryvideo')->whereHas('mappingvideo', function ($q) use($employee) {
                         $q->where('employee_id', $employee->id);
-            })->withTrashed()->get();
-            $resultVideo = EmployeeVideo::with('video')->where('employee_id', $employee->id)->withTrashed()->get();
+            })->whereNull('deleted_at')->get();
+            $resultVideo = EmployeeVideo::with('video')->where('employee_id', $employee->id)->get();
 
             $data = [
                 'employee' => $employee,

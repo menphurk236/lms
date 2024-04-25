@@ -18,9 +18,9 @@ class DepartmentController extends Controller
     {
         DB::beginTransaction();
         try {
-            $departments = Department::with('user')->where(function ($query) use ($request){
+            $departments = Department::with('user')->whereNull('deleted_at')->where(function ($query) use ($request){
                            $query->where('id', 'like', "%{$request->q}%");
-                       })->latest()->withTrashed()->get();
+                       })->latest()->get();
             DB::commit();
             return response()->json($departments, 200);
         } catch (\Exception $e) {
