@@ -17,10 +17,10 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $users = User::with('role')->where(function ($query) use ($request) {
+            $users = User::with('role')->whereNull('deleted_at')->where(function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request->q}%")
                 ->orWhere('username', 'like', "%{$request->q}%");
-            })->latest()->withTrashed()->get();
+            })->latest()->get();
             DB::commit();
             return response()->json($users, 200);
         } catch (\Exception $e) {
