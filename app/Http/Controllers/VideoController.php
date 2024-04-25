@@ -23,9 +23,9 @@ class VideoController extends Controller
     {
         DB::beginTransaction();
         try {
-            $videos = Video::with('user', 'categoryvideo')->where(function ($query) use ($request) {
+            $videos = Video::with('user', 'categoryvideo')->whereNull('deleted_at')->where(function ($query) use ($request) {
                 $query->where('title', 'like', "%{$request->q}%");
-            })->latest()->withTrashed()->get();
+            })->latest()->get();
             DB::commit();
             return response()->json($videos, 200);
         } catch (\Exception $e) {
