@@ -134,7 +134,8 @@ class CategoryController extends Controller
     {
         DB::beginTransaction();
         try {
-            CategoryVideo::destroy($id);
+            $categoryVideo = CategoryVideo::find($id);
+            $categoryVideo->delete();
             DB::commit();
             return response()->json(['message' => 'Category deleted successfully'], 200);
         } catch (\Exception $e) {
