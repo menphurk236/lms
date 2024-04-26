@@ -74,7 +74,7 @@ class EmployeeController extends Controller
         DB::beginTransaction();
         try {
             $employee = Employee::with('department')->find($id);
-            $employeeVideos = MappingVideo::with('video')->where('employee_id', $id)->whereNull('deleted_at')->get();
+            $employeeVideos = MappingVideo::with('video')->where('employee_id', $id)->get();
             $employee->employeeVideos = $employeeVideos;
             DB::commit();
             return response()->json($employee, 200);
