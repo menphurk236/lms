@@ -191,7 +191,7 @@
                   <div class="form-group form-group-lg col-7">
                     <label class="sr-only" for="search">Search</label>
                     <select class="form-control">
-                      <option></option>
+                      <option>--กรุณาเลือก--</option>
                       <option>ดูแล้ว</option>
                       <option>ผิดพลาด</option>
                       <option>ดูไม่สำเร็จ</option>
