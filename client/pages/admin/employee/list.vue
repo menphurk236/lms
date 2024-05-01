@@ -99,6 +99,13 @@
                         : ""
                       : props.row[props.column.field]
                   }}
+                  {{
+                    props.column.field == "employee_videos"
+                      ? props.row.employee_videos.length > 0
+                        ? props.row.employee_videos.timespent
+                        : ""
+                      : ""
+                  }}
                 </template>
               </vue-good-table>
             </div>
@@ -147,7 +154,7 @@ export default {
         },
         {
           label: "เปอร์เซ็นต์ที่ดู",
-          field: "video_duration",
+          field: "percent",
           tdClass: "text-center",
           thClass: "text-center",
           sortable: true,
@@ -161,6 +168,16 @@ export default {
           sortable: false,
         },
       ];
+    },
+    sumTotalSeeVideo() {
+      var total = this.employees.reduce((acc, employee) => {
+        //console.log(employee.employee_videos);
+        if (employee.employee_videos.length > 0) {
+          return acc + employee.employee_videos.timespent;
+        }
+        //return acc + employee.video_duration;
+      }, 0);
+      console.log(total);
     },
   },
   methods: {

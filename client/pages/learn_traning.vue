@@ -240,24 +240,42 @@
                     <tbody>
                       <tr v-for="(item, index) in resultVideo" :key="item">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ item.video.categoryvideo.name }}</td>
                         <td>
-                          <a href="#" @click="play(item.id)">{{
-                            item.video.title
-                          }}</a>
+                          <template v-if="item.video === null"> - </template>
+                          <template v-else>
+                            {{ item.video.categoryvideo.name }}>
+                          </template>
                         </td>
-                        <td>{{ item.video.video_duration }}</td>
+                        <td>
+                          <template v-if="item.video === null"> - </template>
+                          <template v-else>
+                            <a href="#" @click="play(item.id)">{{
+                              item.video.title
+                            }}</a>
+                          </template>
+                        </td>
+                        <td>
+                          <template v-if="item.video === null"> - </template>
+                          <template v-else>
+                            {{ item.video.video_duration }}
+                          </template>
+                        </td>
                         <td>{{ item.created_by != null ? "-" : "-" }}</td>
                         <td class="text-right">
-                          <span
-                            v-if="item.timespent === item.video.video_duration"
-                          >
-                            ดูแล้ว
-                          </span>
-                          <span v-else-if="item.timespent === 0">
-                            ดูไม่สำเร็จ
-                          </span>
-                          <span v-else>ดูไม่สำเร็จ</span>
+                          <template v-if="item.video === null">-</template>
+                          <template v-else>
+                            <span
+                              v-if="
+                                item.timespent === item.video.video_duration
+                              "
+                            >
+                              ดูแล้ว
+                            </span>
+                            <span v-else-if="item.timespent === 0">
+                              ดูไม่สำเร็จ
+                            </span>
+                            <span v-else>ดูไม่สำเร็จ</span>
+                          </template>
                         </td>
                       </tr>
                     </tbody>

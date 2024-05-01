@@ -18,7 +18,7 @@ class EmployeeController extends Controller
     {
         DB::beginTransaction();
         try {
-            $employees = Employee::with('department')->whereNull('deleted_at')->where(function ($query) use ($request) {
+            $employees = Employee::with('department', 'employeeVideos')->whereNull('deleted_at')->where(function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request->q}%")
                 ->orWhere('code', 'like', "%{$request->q}%");
             })->latest()->get();

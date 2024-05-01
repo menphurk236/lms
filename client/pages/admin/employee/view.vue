@@ -17,7 +17,7 @@
               <h4><span>แผนก</span>{{ employee.department.name }}</h4>
             </div>
             <div class="typography-line">
-              <h4><span>เปอร์เซ็นต์ที่ดู</span>0%</h4>
+              <h4><span>เปอร์เซ็นต์ที่ดู</span>{{ employee.percent }}%</h4>
             </div>
             <div class="table-responsive">
               <vue-good-table
@@ -76,7 +76,7 @@
                 <i class="fas fa-pencil-alt"></i> เพิ่มวิดิโอ
               </button>
             </center>
-
+            <!-- {{ sumPercentSeeVideo }} -->
             <!-- Modal -->
             <b-modal v-model="employeeModelAddVideo" hide-footer>
               <div class="modal-header">
@@ -257,6 +257,14 @@ export default {
           sortable: false,
         },
       ];
+    },
+    sumPercentSeeVideo: function () {
+      // `this` points to the vm instance
+      //var total = this.employee.employeeVideos.forEach((empvideo) => {
+      console.log("1111");
+      //return employeeVideos.video.percent_see_video;
+      //});
+      //return total;
     },
   },
 };
