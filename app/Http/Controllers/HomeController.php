@@ -16,7 +16,7 @@ class HomeController extends Controller
         DB::beginTransaction();
         try{
             $employee = Employee::with('department', 'mappingvideo')->where('name', 'LIKE', "%{$request->q}%")->firstOrFail();
-            $video = Video::with('categoryvideo')->whereHas('mappingvideo', function ($q) use($employee) {
+            $video = Video::with('categoryvideo', 'employeeVideo', 'user')->whereHas('mappingvideo', function ($q) use($employee) {
                         $q->where('employee_id', $employee->id);
             })->whereNull('deleted_at')->get();
             $resultVideo = EmployeeVideo::with('video')->where('employee_id', $employee->id)->get();

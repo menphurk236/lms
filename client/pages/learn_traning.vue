@@ -174,8 +174,31 @@
                           }}</a>
                         </td>
                         <td>{{ item.video_duration }}</td>
-                        <td>{{ item.created_by != null ? "-" : "-" }}</td>
-                        <td class="text-right">ดูไม่สำเร็จ</td>
+                        <td>
+                          {{
+                            item.created_by != null
+                              ? item.user != null
+                                ? item.user.name
+                                : "-"
+                              : "-"
+                          }}
+                        </td>
+                        <td class="text-right">
+                          <template
+                            v-if="
+                              item.employee_video.timespent ===
+                              item.video_duration
+                            "
+                          >
+                            ดูแล้ว
+                          </template>
+                          <template
+                            v-else-if="item.employee_video.timespent === 0"
+                          >
+                            ดูไม่สำเร็จ
+                          </template>
+                          <template v-else>ดูไม่สำเร็จ</template>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -333,7 +356,7 @@ export default {
         const seconds = Math.floor(sec - minutes * 60);
 
         const timespent = `${minutes < 10 ? `0${minutes}` : minutes}:${
-          seconds < 10 ? `0${seconds}` : seconds
+          seconds < 10 ? `${seconds}` : seconds
         }`; // result: 02:23
 
         if (video.readyState == 4) {
@@ -363,7 +386,7 @@ export default {
         const seconds = Math.floor(sec - minutes * 60);
 
         const timespent = `${minutes < 10 ? `0${minutes}` : minutes}:${
-          seconds < 10 ? `0${seconds}` : seconds
+          seconds < 10 ? `${seconds}` : seconds
         }`; // result: 02:23
         if (video.readyState == 4) {
           var formdata = new FormData();
