@@ -184,20 +184,23 @@
                           }}
                         </td>
                         <td class="text-right">
-                          <template
-                            v-if="
-                              item.employee_video.timespent ===
-                              item.video_duration
-                            "
-                          >
-                            ดูแล้ว
+                          <template v-if="item.employee_video != null">
+                            <template
+                              v-if="
+                                item.employee_video.timespent ===
+                                item.video_duration
+                              "
+                            >
+                              ดูแล้ว
+                            </template>
+                            <template
+                              v-else-if="item.employee_video.timespent === 0"
+                            >
+                              ดูไม่สำเร็จ
+                            </template>
+                            <template v-else>ดูไม่สำเร็จ</template>
                           </template>
-                          <template
-                            v-else-if="item.employee_video.timespent === 0"
-                          >
-                            ดูไม่สำเร็จ
-                          </template>
-                          <template v-else>ดูไม่สำเร็จ</template>
+                          <template v-else> ดูไม่สำเร็จ </template>
                         </td>
                       </tr>
                     </tbody>

@@ -183,8 +183,10 @@ export default {
       }
       if (this.form.id) {
         await this.$departmentService.updateDepartment(this.form.id, this.form);
+        window.location.reload();
       } else {
         await this.$departmentService.createDepartment(this.form);
+        window.location.reload();
       }
 
       this.showModal = false;

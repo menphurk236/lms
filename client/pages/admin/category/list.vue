@@ -18,7 +18,7 @@
             >
               <div class="row">
                 <label class="col-form-label" style="font-size: 1em"
-                  >รหัสหมวด</label
+                  >รหัส</label
                 >
                 <div class="col-md-3">
                   <div class="form-group">
@@ -36,7 +36,7 @@
                   </div>
                 </div>
                 <label class="col-form-label" style="font-size: 1em"
-                  >ชื่อหมวด</label
+                  >หมวด</label
                 >
                 <div class="col-md-3">
                   <div class="form-group">

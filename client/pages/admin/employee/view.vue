@@ -48,7 +48,7 @@
                   {{
                     props.column.field == "categoryvideo"
                       ? props.row.video != null
-                        ? props.row.video.category_video.name
+                        ? props.row.video.categoryvideo.name
                         : ""
                       : props.row[props.column.field]
                   }}
