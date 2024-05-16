@@ -66,6 +66,13 @@
                         : ""
                       : props.row[props.column.field]
                   }}
+                  {{
+                    props.column.field == "created_upload"
+                      ? props.row.video !== null
+                        ? props.row.video.created_upload
+                        : ""
+                      : props.row[props.column.field]
+                   }}
                 </template>
               </vue-good-table>
             </div>
