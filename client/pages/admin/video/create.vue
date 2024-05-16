@@ -75,6 +75,7 @@
                     <input
                       type="text"
                       v-model="form.video_duration"
+                      placeholder="ตัวอย่างการกรอก 00:00"
                       :class="{
                         'is-invalid': $v.form.video_duration.$error,
                       }"
@@ -84,7 +85,7 @@
                       v-if="!$v.form.video_duration.required"
                       class="invalid-feedback"
                     >
-                      กรุณาความยาววิดิโอ
+                      กรุณากรอกความยาววิดิโอ (ตัวอย่างการกรอก 00:00)
                     </div>
                   </div>
                 </div>

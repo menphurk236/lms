@@ -269,7 +269,7 @@
                         <td>
                           <template v-if="item.video === null"> - </template>
                           <template v-else>
-                            {{ item.video.categoryvideo.name }}>
+                            {{ item.video.categoryvideo.name }}
                           </template>
                         </td>
                         <td>
@@ -286,7 +286,15 @@
                             {{ item.video.video_duration }}
                           </template>
                         </td>
-                        <td>{{ item.created_by != null ? "-" : "-" }}</td>
+                        <td>
+                          {{
+                            item.video.created_by != null
+                              ? item.video.user != null
+                                ? item.video.user.name
+                                : "-"
+                              : "-"
+                          }}
+                        </td>
                         <td class="text-right">
                           <template v-if="item.video === null">-</template>
                           <template v-else>

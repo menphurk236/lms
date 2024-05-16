@@ -24,6 +24,6 @@ class EmployeeVideo extends Model
 
     public function video()
     {
-        return $this->belongsTo(Video::class, 'video_id')->with('categoryvideo');
+        return $this->belongsTo(Video::class, 'video_id')->with('categoryvideo', 'user');
     }
 }

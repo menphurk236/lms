@@ -19,7 +19,9 @@ class Video extends Model
         'title',
         'video_path',
         'video_duration',
-        'created_upload'
+        'created_upload',
+        'created_by',
+        'updated_by',
     ];
 
     protected $appends = [
