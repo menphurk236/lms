@@ -366,7 +366,7 @@ export default {
         const minutes = Math.floor(sec / 60);
         const seconds = Math.floor(sec - minutes * 60);
 
-        const timespent = `${minutes < 10 ? `0${minutes}` : minutes}:${
+        const timespent = `${minutes < 10 ? `0${minutes}` : minutes}.${
           seconds < 10 ? `${seconds}` : seconds
         }`; // result: 02:23
 
@@ -396,7 +396,7 @@ export default {
         const minutes = Math.floor(sec / 60);
         const seconds = Math.floor(sec - minutes * 60);
 
-        const timespent = `${minutes < 10 ? `0${minutes}` : minutes}:${
+        const timespent = `${minutes < 10 ? `0${minutes}` : minutes}.${
           seconds < 10 ? `${seconds}` : seconds
         }`; // result: 02:23
         if (video.readyState == 4) {

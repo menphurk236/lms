@@ -35,6 +35,9 @@
                       "
                       label="name"
                     >
+                      <template v-slot:option="option">
+                        {{ option.code }} : {{ option.name }}
+                      </template>
                     </v-select>
                     <div
                       v-if="!$v.form.category_video_id.required"
